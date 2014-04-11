@@ -1,0 +1,22 @@
+#! /bin/sh
+
+if [ -z "$1" ]; then
+  KERNEL_VERSION=`uname -r`
+else
+  KERNEL_VERSION="$1"
+fi
+
+[ -d work ] && rm -rf work
+mkdir work
+cd work
+apt-get source "linux-image-${KERNEL_VERSION}"
+sourcedir=`find . -name 'linux-*' -type d`
+if [ -z "$sourcedir" -o ! -d "$sourcedir" ]; then
+  echo "ERROR!  something wrong"
+  exit 1
+fi
+cd "$sourcedir"
+
+cat ../../patches/*.patch | patch -p0
+fakeroot debian/rules clean
+fakeroot debian/rules binary-headers binary-generic
