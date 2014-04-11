@@ -1,4 +1,4 @@
-Private modified linux kernel for ubuntu
-========================================
+Private modified linux kernel for debian/ubuntu
+===============================================
 
-License of These patches is GPLv2.
+License of these patches is GPLv2.
