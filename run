@@ -19,5 +19,6 @@ cd "$sourcedir"
 
 cat ../../patches/*.patch | patch -p0
 dch -lamura "Local patches are applied"
+cp debian/changelog debian.master
 fakeroot debian/rules clean
 fakeroot debian/rules binary-headers binary-generic
