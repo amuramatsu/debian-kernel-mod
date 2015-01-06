@@ -10,6 +10,11 @@ fi
 mkdir work
 cd work
 apt-get source "linux-image-${KERNEL_VERSION}"
+pkgname=`awk '/Source:/{print $2}' linux*.dsc`
+ltsname=`echo $pkgname|sed 's/^linux-lts-//'`
+if [ x"$ltsname" = x"$pkgname" ]; then
+  ltsname=master
+fi
 sourcedir=`find . -name 'linux-*' -type d`
 if [ -z "$sourcedir" -o ! -d "$sourcedir" ]; then
   echo "ERROR!  something wrong"
@@ -18,6 +23,6 @@ fi
 cd "$sourcedir"
 
 cat ../../patches/*.patch | patch -p0
-dch -lamura -c debian.master/changelog "Local patches are applied"
+dch -lamura -c debian.$ltsname/changelog "Local patches are applied"
 fakeroot debian/rules clean
 fakeroot debian/rules binary-headers binary-generic
