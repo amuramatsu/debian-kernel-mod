@@ -1,0 +1,285 @@
+diff -ruN a/drivers/mmc/host/sdhci-acpi.c b/drivers/mmc/host/sdhci-acpi.c
+--- a/drivers/mmc/host/sdhci-acpi.c	2016-12-04 00:31:00.960125798 +0900
++++ b/drivers/mmc/host/sdhci-acpi.c	2016-12-04 00:32:33.181430587 +0900
+@@ -48,6 +48,24 @@
+ 
+ #include "sdhci.h"
+ 
++#ifdef CONFIG_X86
++#include <asm/cpu_device_id.h>
++static bool sdhci_acpi_on_byt(void)
++{
++	static const struct x86_cpu_id byt[] = {
++		{ X86_VENDOR_INTEL, 6, 0x37 },
++		{}
++	};
++
++	return x86_match_cpu(byt);
++}
++#else
++static bool sdhci_acpi_on_byt(void)
++{
++	return false;
++}
++#endif
++
+ enum {
+ 	SDHCI_ACPI_SD_CD		= BIT(0),
+ 	SDHCI_ACPI_RUNTIME_PM		= BIT(1),
+@@ -247,6 +265,14 @@
+ 	return ret;
+ }
+ 
++static void sdhci_acpi_int_dma_latency(struct sdhci_host *host)
++{
++	if (sdhci_acpi_on_byt()) {
++		host->dma_latency = 20;
++		host->lat_cancel_delay = 275;
++	}
++}
++
+ static int sdhci_acpi_emmc_probe_slot(struct platform_device *pdev,
+ 				      const char *hid, const char *uid)
+ {
+@@ -265,6 +291,8 @@
+ 	    sdhci_readl(host, SDHCI_CAPABILITIES_1) == 0x00000807)
+ 		host->timeout_clk = 1000; /* 1000 kHz i.e. 1 MHz */
+ 
++	sdhci_acpi_int_dma_latency(host);
++
+ 	return 0;
+ }
+ 
+@@ -279,6 +307,8 @@
+ 
+ 	host = c->host;
+ 
++	sdhci_acpi_int_dma_latency(host);
++
+ 	/* Platform specific code during sdio probe slot goes here */
+ 
+ 	return 0;
+@@ -295,6 +325,8 @@
+ 
+ 	host = c->host;
+ 
++	sdhci_acpi_int_dma_latency(host);
++
+ 	/* Platform specific code during sd probe slot goes here */
+ 
+ 	if (hid && !strcmp(hid, "80865ACA"))
+diff -ruN a/drivers/mmc/host/sdhci-pci-core.c b/drivers/mmc/host/sdhci-pci-core.c
+--- a/drivers/mmc/host/sdhci-pci-core.c	2016-12-04 00:31:00.964125660 +0900
++++ b/drivers/mmc/host/sdhci-pci-core.c	2016-12-04 00:32:37.981353532 +0900
+@@ -357,6 +357,12 @@
+ 	return ret;
+ }
+ 
++static void byt_set_dma_latency(struct sdhci_host *host)
++{
++	host->dma_latency = 20;
++	host->lat_cancel_delay = 275;
++}
++
+ static int byt_emmc_probe_slot(struct sdhci_pci_slot *slot)
+ {
+ 	slot->host->mmc->caps |= MMC_CAP_8_BIT_DATA | MMC_CAP_NONREMOVABLE |
+@@ -364,6 +370,9 @@
+ 				 MMC_CAP_WAIT_WHILE_BUSY;
+ 	slot->host->mmc->caps2 |= MMC_CAP2_HC_ERASE_SZ;
+ 	slot->hw_reset = sdhci_pci_int_hw_reset;
++	if (slot->chip->pdev->device == PCI_DEVICE_ID_INTEL_BYT_EMMC ||
++	    slot->chip->pdev->device == PCI_DEVICE_ID_INTEL_BYT_EMMC2)
++		byt_set_dma_latency(slot->host);
+ 	if (slot->chip->pdev->device == PCI_DEVICE_ID_INTEL_BSW_EMMC)
+ 		slot->host->timeout_clk = 1000; /* 1000 kHz i.e. 1 MHz */
+ 	if (slot->chip->pdev->device == PCI_DEVICE_ID_INTEL_SPT_EMMC) {
+@@ -377,6 +386,8 @@
+ {
+ 	slot->host->mmc->caps |= MMC_CAP_POWER_OFF_CARD | MMC_CAP_NONREMOVABLE |
+ 				 MMC_CAP_WAIT_WHILE_BUSY;
++	if (slot->chip->pdev->device == PCI_DEVICE_ID_INTEL_BYT_SDIO)
++		byt_set_dma_latency(slot->host);
+ 	return 0;
+ }
+ 
+@@ -390,6 +401,8 @@
+ 	    slot->chip->pdev->device == PCI_DEVICE_ID_INTEL_BXTM_SD ||
+ 	    slot->chip->pdev->device == PCI_DEVICE_ID_INTEL_APL_SD)
+ 		slot->host->mmc_host_ops.get_cd = bxt_get_cd;
++	if (slot->chip->pdev->device == PCI_DEVICE_ID_INTEL_BYT_SD)
++		byt_set_dma_latency(slot->host);
+ 
+ 	return 0;
+ }
+diff -ruN a/drivers/mmc/host/sdhci.c b/drivers/mmc/host/sdhci.c
+--- a/drivers/mmc/host/sdhci.c	2016-12-04 00:31:00.972125385 +0900
++++ b/drivers/mmc/host/sdhci.c	2016-12-04 00:38:05.959260961 +0900
+@@ -736,6 +736,49 @@
+ 	}
+ }
+ 
++static bool sdhci_pm_qos_use_dma_latency(struct sdhci_host *host)
++{
++	return host->dma_latency != PM_QOS_DEFAULT_VALUE;
++}
++
++static void sdhci_pm_qos_set_dma_latency(struct sdhci_host *host,
++					 struct mmc_request *mrq)
++{
++	if (sdhci_pm_qos_use_dma_latency(host) && mrq->data &&
++	    (host->flags & (SDHCI_USE_SDMA | SDHCI_USE_ADMA))) {
++		pm_qos_update_request(&host->pm_qos_req, host->dma_latency);
++		host->pm_qos_set = true;
++	}
++}
++
++static void sdhci_pm_qos_unset(struct sdhci_host *host)
++{
++	unsigned int delay;
++
++	if (host->pm_qos_set) {
++		host->pm_qos_set = false;
++		delay = host->consecutive_req ? host->lat_cancel_delay : 0;
++		if (WARN(!pm_qos_request_active(&host->pm_qos_req),
++			 "%s called for unknown object.", __func__))
++			return;
++		schedule_delayed_work(&host->pm_qos_req.work,
++				      usecs_to_jiffies(delay));
++	}
++}
++
++static void sdhci_pm_qos_add(struct sdhci_host *host)
++{
++	if (sdhci_pm_qos_use_dma_latency(host))
++		pm_qos_add_request(&host->pm_qos_req, PM_QOS_CPU_DMA_LATENCY,
++				   PM_QOS_DEFAULT_VALUE);
++}
++
++static void sdhci_pm_qos_remove(struct sdhci_host *host)
++{
++	if (pm_qos_request_active(&host->pm_qos_req))
++		pm_qos_remove_request(&host->pm_qos_req);
++}
++
+ static void sdhci_prepare_data(struct sdhci_host *host, struct mmc_command *cmd)
+ {
+ 	u8 ctrl;
+@@ -1379,6 +1422,8 @@
+ 
+ 	sdhci_runtime_pm_get(host);
+ 
++	sdhci_pm_qos_set_dma_latency(host, mrq);
++
+ 	/* Firstly check card presence */
+ 	present = mmc->ops->get_cd(mmc);
+ 
+@@ -1402,6 +1447,7 @@
+ 	}
+ 
+ 	host->mrq = mrq;
++	host->consecutive_req = 0;
+ 
+ 	if (!present || host->flags & SDHCI_DEVICE_DEAD) {
+ 		host->mrq->cmd->error = -ENOMEDIUM;
+@@ -1747,7 +1793,8 @@
+ 	struct sdhci_host *host = mmc_priv(mmc);
+ 	unsigned long flags;
+ 
+-	sdhci_runtime_pm_get(host);
++	if (enable)
++		sdhci_runtime_pm_get(host);
+ 
+ 	spin_lock_irqsave(&host->lock, flags);
+ 	if (enable)
+@@ -1758,7 +1805,8 @@
+ 	sdhci_enable_sdio_irq_nolock(host, enable);
+ 	spin_unlock_irqrestore(&host->lock, flags);
+ 
+-	sdhci_runtime_pm_put(host);
++	if (!enable)
++		sdhci_runtime_pm_put(host);
+ }
+ 
+ static int sdhci_do_start_signal_voltage_switch(struct sdhci_host *host,
+@@ -2179,7 +2227,12 @@
+ {
+ 	struct sdhci_host *host = mmc_priv(mmc);
+ 
+-	mrq->data->host_cookie = COOKIE_UNMAPPED;
++	host->consecutive_req = 1;
++
++	if (mrq->data->host_cookie) {
++		mrq->data->host_cookie = COOKIE_UNMAPPED;
++		return;
++	}
+ 
+ 	if (host->flags & SDHCI_REQ_USE_DMA)
+ 		sdhci_pre_dma_transfer(host, mrq->data);
+@@ -2247,6 +2300,8 @@
+ 
+ 	host = (struct sdhci_host*)param;
+ 
++	sdhci_pm_qos_unset(host);
++
+ 	spin_lock_irqsave(&host->lock, flags);
+ 
+         /*
+@@ -2878,6 +2933,7 @@
+ 	host = mmc_priv(mmc);
+ 	host->mmc = mmc;
+ 	host->mmc_host_ops = sdhci_ops;
++	host->dma_latency = PM_QOS_DEFAULT_VALUE;
+ 	mmc->ops = &host->mmc_host_ops;
+ 
+ 	return host;
+@@ -3366,6 +3422,8 @@
+ 	 */
+ 	mmc->max_blk_count = (host->quirks & SDHCI_QUIRK_NO_MULTIBLOCK) ? 1 : 65535;
+ 
++	sdhci_pm_qos_add(host);
++
+ 	/*
+ 	 * Init tasklets.
+ 	 */
+@@ -3429,6 +3487,7 @@
+ #endif
+ untasklet:
+ 	tasklet_kill(&host->finish_tasklet);
++	sdhci_pm_qos_remove(host);
+ 
+ 	return ret;
+ }
+@@ -3485,6 +3544,8 @@
+ 
+ 	host->adma_table = NULL;
+ 	host->align_buffer = NULL;
++
++	sdhci_pm_qos_remove(host);
+ }
+ 
+ EXPORT_SYMBOL_GPL(sdhci_remove_host);
+diff -ruN a/drivers/mmc/host/sdhci.h b/drivers/mmc/host/sdhci.h
+--- a/drivers/mmc/host/sdhci.h	2016-12-04 00:31:00.976125248 +0900
++++ b/drivers/mmc/host/sdhci.h	2016-12-04 00:32:28.701501260 +0900
+@@ -19,6 +19,7 @@
+ #include <linux/io.h>
+ 
+ #include <linux/mmc/host.h>
++#include <linux/pm_qos.h>
+ 
+ /*
+  * Controller registers
+@@ -433,6 +434,12 @@
+ 	struct mmc_host_ops mmc_host_ops;	/* MMC host ops */
+ 	u64 dma_mask;		/* custom DMA mask */
+ 
++	struct pm_qos_request pm_qos_req;
++	int dma_latency;
++	int lat_cancel_delay;
++	int consecutive_req;
++	bool pm_qos_set;
++
+ #if defined(CONFIG_LEDS_CLASS) || defined(CONFIG_LEDS_CLASS_MODULE)
+ 	struct led_classdev led;	/* LED control */
+ 	char led_name[32];

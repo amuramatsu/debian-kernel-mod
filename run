@@ -22,7 +22,7 @@ if [ -z "$sourcedir" -o ! -d "$sourcedir" ]; then
 fi
 cd "$sourcedir"
 
-cat ../../patches/*.patch | patch -p0
-dch -lamura -c debian.$ltsname/changelog "Local patches are applied"
+cat ../../patches/*.patch | patch -p1
+dch -lpb -c debian.$ltsname/changelog "Local patches are applied"
 fakeroot debian/rules clean
 fakeroot debian/rules binary-headers binary-generic

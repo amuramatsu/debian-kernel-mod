@@ -1,5 +1,5 @@
---- debian/rules.d/0-common-vars.mk.orig	2014-04-13 04:31:24.000000000 +0900
-+++ debian/rules.d/0-common-vars.mk	2014-04-13 04:32:15.672402000 +0900
+--- a/debian/rules.d/0-common-vars.mk.orig	2014-04-13 04:31:24.000000000 +0900
++++ b/debian/rules.d/0-common-vars.mk	2014-04-13 04:32:15.672402000 +0900
 @@ -8,7 +8,7 @@
  revisions := $(shell sed -n 's/^$(src_pkg_name)\ .*($(release)-\(.*\)).*$$/\1/p' $(DEBIAN)/changelog | tac)
  revision ?= $(word $(words $(revisions)),$(revisions))
