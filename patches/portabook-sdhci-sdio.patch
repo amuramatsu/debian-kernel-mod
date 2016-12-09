@@ -1,0 +1,11 @@
+diff -ruN a/drivers/mmc/host/sdhci-acpi.c b/drivers/mmc/host/sdhci-acpi.c
+--- a/drivers/mmc/host/sdhci-acpi.c	2016-12-03 22:11:01.787429749 +0900
++++ b/drivers/mmc/host/sdhci-acpi.c	2016-12-03 22:12:18.177051947 +0900
+@@ -381,6 +381,7 @@
+ 	{ "80865ACC", NULL, &sdhci_acpi_slot_int_emmc },
+ 	{ "80865AD0", NULL, &sdhci_acpi_slot_int_sdio },
+ 	{ "80860F14" , "1" , &sdhci_acpi_slot_int_emmc },
++	{ "80860F14" , "2" , &sdhci_acpi_slot_int_sdio },
+ 	{ "80860F14" , "3" , &sdhci_acpi_slot_int_sd   },
+ 	{ "80860F16" , NULL, &sdhci_acpi_slot_int_sd   },
+ 	{ "INT33BB"  , "2" , &sdhci_acpi_slot_int_sdio },
