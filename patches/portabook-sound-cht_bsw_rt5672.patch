@@ -21,7 +21,7 @@
 +	{
 +		/* SSP2 - Codec */
 +		.name = "SSP2-Codec2",
-+		.be_id = 1,
++		.id = 2,
 +		.cpu_dai_name = "ssp2-port",
 +		.platform_name = "sst-mfld-platform",
 +		.no_pcm = 1,
@@ -39,7 +39,7 @@
 +	{
 +		/* SSP2 - Codec */
 +		.name = "SSP1-Codec",
-+		.be_id = 1,
++		.id = 3,
 +		.cpu_dai_name = "ssp1-port",
 +		.platform_name = "sst-mfld-platform",
 +		.no_pcm = 1,
@@ -57,7 +57,7 @@
 +	{
 +		/* SSP2 - Codec */
 +		.name = "SSP0-Codec",
-+		.be_id = 1,
++		.id = 4,
 +		.cpu_dai_name = "ssp0-port",
 +		.platform_name = "sst-mfld-platform",
 +		.no_pcm = 1,

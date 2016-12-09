@@ -1,12 +1,11 @@
-diff -ruN a/sound/soc/intel/atom/sst/sst_acpi.c b/sound/soc/intel/atom/sst/sst_acpi.c
---- a/sound/soc/intel/atom/sst/sst_acpi.c	2016-12-03 22:11:01.791429625 +0900
-+++ b/sound/soc/intel/atom/sst/sst_acpi.c	2016-12-03 22:20:55.493522275 +0900
-@@ -356,6 +356,8 @@
+--- a/sound/soc/intel/atom/sst/sst_acpi.c
++++ b/sound/soc/intel/atom/sst/sst_acpi.c
+@@ -388,6 +388,8 @@
+ 	{"10EC5640", "bytcr_rt5640", "intel/fw_sst_22a8.bin", "bytcr_rt5640", cht_quirk,
  						&chv_platform_data },
- 	{"10EC5650", "cht-bsw", "cht-bsw-rt5645", NULL, "intel/fw_sst_22a8.bin",
- 						&chv_platform_data },
-+ 	{"10EC5672", "cht-bsw", "cht-bsw-rt5672", NULL, "intel/fw_sst_22a8.bin",
+ 
++ 	{"10EC5672", "cht-bsw-rt5672", "intel/fw_sst_22a8.bin", "cht-bsw", NULL,
 + 						&chv_platform_data },
- 	{"193C9890", "cht-bsw", "cht-bsw-max98090", NULL,
- 	"intel/fw_sst_22a8.bin", &chv_platform_data },
  	{},
+ };
+ 
