@@ -1,0 +1,23 @@
+--- a/drivers/i2c/i2c-core.c
++++ b/drivers/i2c/i2c-core.c
+@@ -188,6 +188,20 @@
+ 
+ 	adev->power.flags.ignore_parent = true;
+ 	strlcpy(info.type, dev_name(&adev->dev), sizeof(info.type));
++
++	/* special hacks for portabook */
++	if (!strcmp(dev_name(&adev->dev), "LNXVIDEO:00")) {
++		if ((!strcmp(dev_name(&adapter->dev), "i2c-1")
++			&& info.addr == 0x2c) ||
++		    (!strcmp(dev_name(&adapter->dev), "i2c-2")
++			&& info.addr == 0x7e)) {
++			dev_info(&adapter->dev,
++			"skip to add I2C device %s from ACPI at 0x%02hx\n",
++				dev_name(&adev->dev), info.addr);
++			return AE_OK;
++		}
++	}
++
+ 	if (!i2c_new_device(adapter, &info)) {
+ 		adev->power.flags.ignore_parent = false;
+ 		dev_err(&adapter->dev,
