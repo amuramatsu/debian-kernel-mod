@@ -23,6 +23,13 @@ fi
 cd "$sourcedir"
 
 cat ../../patches/*.patch | patch -p1
+if [ -r "../../patches/dsdt.hex" ]; then
+  cp ../../patches/dsdt.hex include
+  cat <<EOF >> debian.$ltsname/config/config.common.ubuntu
+CONFIG_ACPI_CUSTOM_DSDT=y
+CONFIG_ACPI_CUSTOM_DSDT_FILE="dsdt.hex"
+EOF
+fi
 dch -lpb -c debian.$ltsname/changelog "Local patches are applied"
 fakeroot debian/rules clean
 fakeroot debian/rules binary-headers binary-generic
