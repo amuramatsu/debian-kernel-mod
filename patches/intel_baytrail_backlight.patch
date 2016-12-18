@@ -202,7 +202,7 @@
 +	struct device *dev;
 +
 +	printk("intel_soc_pmic check on i915\n");
-+	dev = bus_find_device_by_name(&i2c_bus_type, NULL, "INT33FD:00");
++	dev = bus_find_device_by_name(&i2c_bus_type, NULL, "i2c-INT33FD:00");
 +	if (!dev)
 +		return -1;
 +	intel_soc_pmic_i2c = i2c_verify_client(dev);
