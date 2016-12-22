@@ -8,3 +8,24 @@
  	{ },
  };
  MODULE_DEVICE_TABLE(acpi, rt5670_acpi_match);
+@@ -2826,6 +2827,10 @@
+ 	{}
+ };
+ 
++static int use_braswell = 0;
++module_param(use_braswell, int, 0644);
++MODULE_PARM_DESC(use_braswell, "use braswell parameter");
++
+ static int rt5670_i2c_probe(struct i2c_client *i2c,
+ 		    const struct i2c_device_id *id)
+ {
+@@ -2845,7 +2850,8 @@
+ 	if (pdata)
+ 		rt5670->pdata = *pdata;
+ 
+-	if (dmi_check_system(dmi_platform_intel_braswell)) {
++	if (use_braswell || dmi_check_system(dmi_platform_intel_braswell)) {
++		dev_info(&i2c->dev, "Use Braswell params\n");
+ 		rt5670->pdata.dmic_en = true;
+ 		rt5670->pdata.dmic1_data_pin = RT5670_DMIC_DATA_IN2P;
+ 		rt5670->pdata.dev_gpio = true;
