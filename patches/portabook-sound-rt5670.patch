@@ -12,8 +12,8 @@
  	{}
  };
  
-+static int use_braswell = 0;
-+module_param(use_braswell, int, 0644);
++static int use_braswell = 1;
++module_param(use_braswell, bool, 0644);
 +MODULE_PARM_DESC(use_braswell, "use braswell parameter");
 +
  static int rt5670_i2c_probe(struct i2c_client *i2c,
