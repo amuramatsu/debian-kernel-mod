@@ -1,11 +1,57 @@
-diff -ruN a/drivers/mmc/host/sdhci-acpi.c b/drivers/mmc/host/sdhci-acpi.c
---- a/drivers/mmc/host/sdhci-acpi.c	2016-12-03 22:11:01.787429749 +0900
-+++ b/drivers/mmc/host/sdhci-acpi.c	2016-12-03 22:12:18.177051947 +0900
-@@ -381,6 +381,7 @@
- 	{ "80865ACC", NULL, &sdhci_acpi_slot_int_emmc },
- 	{ "80865AD0", NULL, &sdhci_acpi_slot_int_sdio },
- 	{ "80860F14" , "1" , &sdhci_acpi_slot_int_emmc },
-+	{ "80860F14" , "2" , &sdhci_acpi_slot_int_sdio },
- 	{ "80860F14" , "3" , &sdhci_acpi_slot_int_sd   },
- 	{ "80860F16" , NULL, &sdhci_acpi_slot_int_sd   },
- 	{ "INT33BB"  , "2" , &sdhci_acpi_slot_int_sdio },
+--- a/drivers/acpi/acpi_platform.c
++++ b/drivers/acpi/acpi_platform.c
+@@ -52,7 +52,12 @@
+ 
+ 	/* If the ACPI node already has a physical device attached, skip it. */
+ 	if (adev->physical_node_count)
+-		return NULL;
++	{
++		if (!strcmp(acpi_device_hid(adev), "80860F14") && !strcmp(adev->pnp.unique_id, "2"))
++			dev_info(&adev->dev, "Physical node found. Proceeding anyway\n");
++		else
++			return NULL;        
++	}
+ 
+ 	if (!acpi_match_device_ids(adev, forbidden_id_list))
+ 		return ERR_PTR(-EINVAL);
+--- a/drivers/mmc/host/sdhci-acpi.c
++++ b/drivers/mmc/host/sdhci-acpi.c
+@@ -47,6 +47,9 @@
+ #endif
+ 
+ #include "sdhci.h"
++#include <linux/pci.h>
++
++static void patch(struct acpi_device *adev);
+ 
+ enum {
+ 	SDHCI_ACPI_SD_CD		= BIT(0),
+@@ -417,6 +420,10 @@
+ 	hid = acpi_device_hid(device);
+ 	uid = device->pnp.unique_id;
+ 
++	/* Apply patch if you find the sibling device. */
++	if (!strcmp(hid, "80860F14") && !strcmp(uid, "1"))
++		patch(device);
++ 
+ 	iomem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+ 	if (!iomem)
+ 		return -ENOMEM;
+@@ -588,6 +595,17 @@
+ 
+ module_platform_driver(sdhci_acpi_driver);
+ 
++/*Custom patch for a specific SDIO Controller*/
++static void patch(struct acpi_device *adev)
++{
++	struct pci_dev *pcidev = NULL;
++
++	pcidev = pci_get_device(0x8086, 0x2280, NULL);
++	if (!pcidev)
++		return;
++	pci_stop_and_remove_bus_device(pcidev);
++}
++
+ MODULE_DESCRIPTION("Secure Digital Host Controller Interface ACPI driver");
+ MODULE_AUTHOR("Adrian Hunter");
+ MODULE_LICENSE("GPL v2");
