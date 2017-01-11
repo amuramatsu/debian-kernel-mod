@@ -1,0 +1,27 @@
+--- a/drivers/idle/intel_idle.c	2016-10-03 08:24:33.000000000 +0900
++++ b/drivers/idle/intel_idle.c	2017-01-10 21:39:31.878680576 +0900
+@@ -991,13 +991,13 @@
+ static const struct idle_cpu idle_cpu_byt = {
+ 	.state_table = byt_cstates,
+ 	.disable_promotion_to_c1e = true,
+-	.byt_auto_demotion_disable_flag = true,
++	.byt_auto_demotion_disable_flag = false,
+ };
+ 
+ static const struct idle_cpu idle_cpu_cht = {
+ 	.state_table = cht_cstates,
+ 	.disable_promotion_to_c1e = true,
+-	.byt_auto_demotion_disable_flag = true,
++	.byt_auto_demotion_disable_flag = false,
+ };
+ 
+ static const struct idle_cpu idle_cpu_ivb = {
+@@ -1361,6 +1361,8 @@
+ 		drv->state_count += 1;
+ 	}
+ 
++	printk(PREFIX "BYT C6 auto-demotion-disable: %d\n", icpu->byt_auto_demotion_disable_flag);
++
+ 	if (icpu->byt_auto_demotion_disable_flag) {
+ 		wrmsrl(MSR_CC6_DEMOTION_POLICY_CONFIG, 0);
+ 		wrmsrl(MSR_MC6_DEMOTION_POLICY_CONFIG, 0);
