@@ -1,3 +1,4 @@
+diff -ru a/drivers/gpu/drm/i915/i915_drv.c b/drivers/gpu/drm/i915/i915_drv.c
 --- a/drivers/gpu/drm/i915/i915_drv.c
 +++ b/drivers/gpu/drm/i915/i915_drv.c
 @@ -391,6 +391,8 @@
@@ -9,3 +10,139 @@
  	if (!dev_priv->bridge_dev) {
  		DRM_ERROR("bridge device not found\n");
  		return -1;
+diff -ru a/drivers/gpu/drm/i915/intel_sideband.c b/drivers/gpu/drm/i915/intel_sideband.c
+--- a/drivers/gpu/drm/i915/intel_sideband.c
++++ b/drivers/gpu/drm/i915/intel_sideband.c
+@@ -82,11 +82,12 @@
+ u32 vlv_punit_read(struct drm_i915_private *dev_priv, u32 addr)
+ {
+ 	u32 val = 0;
++	u32 pci_devfn = dev_priv->bridge_dev->devfn & 0xFF;
+ 
+ 	WARN_ON(!mutex_is_locked(&dev_priv->rps.hw_lock));
+ 
+ 	mutex_lock(&dev_priv->sb_lock);
+-	vlv_sideband_rw(dev_priv, PCI_DEVFN(0, 0), IOSF_PORT_PUNIT,
++	vlv_sideband_rw(dev_priv, pci_devfn, IOSF_PORT_PUNIT,
+ 			SB_CRRDDA_NP, addr, &val);
+ 	mutex_unlock(&dev_priv->sb_lock);
+ 
+@@ -95,10 +96,11 @@
+ 
+ void vlv_punit_write(struct drm_i915_private *dev_priv, u32 addr, u32 val)
+ {
++	u32 pci_devfn = dev_priv->bridge_dev->devfn & 0xFF;
+ 	WARN_ON(!mutex_is_locked(&dev_priv->rps.hw_lock));
+ 
+ 	mutex_lock(&dev_priv->sb_lock);
+-	vlv_sideband_rw(dev_priv, PCI_DEVFN(0, 0), IOSF_PORT_PUNIT,
++	vlv_sideband_rw(dev_priv, pci_devfn, IOSF_PORT_PUNIT,
+ 			SB_CRWRDA_NP, addr, &val);
+ 	mutex_unlock(&dev_priv->sb_lock);
+ }
+@@ -106,8 +108,9 @@
+ u32 vlv_bunit_read(struct drm_i915_private *dev_priv, u32 reg)
+ {
+ 	u32 val = 0;
++	u32 pci_devfn = dev_priv->bridge_dev->devfn & 0xFF;
+ 
+-	vlv_sideband_rw(dev_priv, PCI_DEVFN(0, 0), IOSF_PORT_BUNIT,
++	vlv_sideband_rw(dev_priv, pci_devfn, IOSF_PORT_BUNIT,
+ 			SB_CRRDDA_NP, reg, &val);
+ 
+ 	return val;
+@@ -115,18 +118,20 @@
+ 
+ void vlv_bunit_write(struct drm_i915_private *dev_priv, u32 reg, u32 val)
+ {
+-	vlv_sideband_rw(dev_priv, PCI_DEVFN(0, 0), IOSF_PORT_BUNIT,
++	u32 pci_devfn = dev_priv->bridge_dev->devfn & 0xFF;
++	vlv_sideband_rw(dev_priv, pci_devfn, IOSF_PORT_BUNIT,
+ 			SB_CRWRDA_NP, reg, &val);
+ }
+ 
+ u32 vlv_nc_read(struct drm_i915_private *dev_priv, u8 addr)
+ {
+ 	u32 val = 0;
++	u32 pci_devfn = dev_priv->bridge_dev->devfn & 0xFF;
+ 
+ 	WARN_ON(!mutex_is_locked(&dev_priv->rps.hw_lock));
+ 
+ 	mutex_lock(&dev_priv->sb_lock);
+-	vlv_sideband_rw(dev_priv, PCI_DEVFN(0, 0), IOSF_PORT_NC,
++	vlv_sideband_rw(dev_priv, pci_devfn, IOSF_PORT_NC,
+ 			SB_CRRDDA_NP, addr, &val);
+ 	mutex_unlock(&dev_priv->sb_lock);
+ 
+@@ -136,7 +141,8 @@
+ u32 vlv_iosf_sb_read(struct drm_i915_private *dev_priv, u8 port, u32 reg)
+ {
+ 	u32 val = 0;
+-	vlv_sideband_rw(dev_priv, PCI_DEVFN(0, 0), port,
++	u32 pci_devfn = dev_priv->bridge_dev->devfn & 0xFF;
++	vlv_sideband_rw(dev_priv, pci_devfn, port,
+ 			SB_CRRDDA_NP, reg, &val);
+ 	return val;
+ }
+@@ -144,35 +150,40 @@
+ void vlv_iosf_sb_write(struct drm_i915_private *dev_priv,
+ 		       u8 port, u32 reg, u32 val)
+ {
+-	vlv_sideband_rw(dev_priv, PCI_DEVFN(0, 0), port,
++	u32 pci_devfn = dev_priv->bridge_dev->devfn & 0xFF;
++	vlv_sideband_rw(dev_priv, pci_devfn, port,
+ 			SB_CRWRDA_NP, reg, &val);
+ }
+ 
+ u32 vlv_cck_read(struct drm_i915_private *dev_priv, u32 reg)
+ {
+ 	u32 val = 0;
+-	vlv_sideband_rw(dev_priv, PCI_DEVFN(0, 0), IOSF_PORT_CCK,
++	u32 pci_devfn = dev_priv->bridge_dev->devfn & 0xFF;
++	vlv_sideband_rw(dev_priv, pci_devfn, IOSF_PORT_CCK,
+ 			SB_CRRDDA_NP, reg, &val);
+ 	return val;
+ }
+ 
+ void vlv_cck_write(struct drm_i915_private *dev_priv, u32 reg, u32 val)
+ {
+-	vlv_sideband_rw(dev_priv, PCI_DEVFN(0, 0), IOSF_PORT_CCK,
++	u32 pci_devfn = dev_priv->bridge_dev->devfn & 0xFF;
++	vlv_sideband_rw(dev_priv, pci_devfn, IOSF_PORT_CCK,
+ 			SB_CRWRDA_NP, reg, &val);
+ }
+ 
+ u32 vlv_ccu_read(struct drm_i915_private *dev_priv, u32 reg)
+ {
+ 	u32 val = 0;
+-	vlv_sideband_rw(dev_priv, PCI_DEVFN(0, 0), IOSF_PORT_CCU,
++	u32 pci_devfn = dev_priv->bridge_dev->devfn & 0xFF;
++	vlv_sideband_rw(dev_priv, pci_devfn, IOSF_PORT_CCU,
+ 			SB_CRRDDA_NP, reg, &val);
+ 	return val;
+ }
+ 
+ void vlv_ccu_write(struct drm_i915_private *dev_priv, u32 reg, u32 val)
+ {
+-	vlv_sideband_rw(dev_priv, PCI_DEVFN(0, 0), IOSF_PORT_CCU,
++	u32 pci_devfn = dev_priv->bridge_dev->devfn & 0xFF;
++	vlv_sideband_rw(dev_priv, pci_devfn, IOSF_PORT_CCU,
+ 			SB_CRWRDA_NP, reg, &val);
+ }
+ 
+diff -ru a/drivers/video/fbdev/intelfb/intelfbhw.c b/drivers/video/fbdev/intelfb/intelfbhw.c
+--- a/drivers/video/fbdev/intelfb/intelfbhw.c
++++ b/drivers/video/fbdev/intelfb/intelfbhw.c
+@@ -180,8 +180,10 @@
+ 	if (!pdev || !aperture_size || !stolen_size)
+ 		return 1;
+ 
+-	/* Find the bridge device.  It is always 0:0.0 */
+-	if (!(bridge_dev = pci_get_bus_and_slot(0, PCI_DEVFN(0, 0)))) {
++	/* Find the bridge device.  It is always 0:0.0 or 0:2.0 */
++	bridge_dev = pci_get_bus_and_slot(0, PCI_DEVFN(0, 0));
++	if (bridge_dev == NULL &&
++	    !(bridge_dev = pci_get_bus_and_slot(0, PCI_DEVFN(2, 0)))) {
+ 		ERR_MSG("cannot find bridge device\n");
+ 		return 1;
+ 	}
