@@ -13,6 +13,8 @@ apt-get source "linux-image-${KERNEL_VERSION}"
 pkgname=`awk '/Source:/{print $2}' linux*.dsc`
 if [ x"$pkgname" = x"linux-hwe-edge" ]; then
   ltsname=hwe-edge
+elif [ x"$pkgname" = x"linux-hwe" ]; then
+  ltsname=hwe
 else
   ltsname=`echo $pkgname|sed 's/^linux-lts-//'`
   if [ x"$ltsname" = x"$pkgname" ]; then
