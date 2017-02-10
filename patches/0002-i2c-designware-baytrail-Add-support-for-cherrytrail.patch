@@ -1,6 +1,24 @@
+From a720673eddebc83d0a9aa548597af750deb6bda5 Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Fri, 2 Dec 2016 11:38:10 +0100
+Subject: [PATCH v2 2/2] i2c: designware-baytrail: Add support for cherrytrail
+
+The cherrytrail punit has the pmic i2c bus access semaphore at a
+different register address.
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ drivers/i2c/busses/i2c-designware-baytrail.c |  3 ++-
+ drivers/i2c/busses/i2c-designware-core.h     |  2 ++
+ drivers/i2c/busses/i2c-designware-pcidrv.c   | 25 ++++++++++++++++++-------
+ drivers/i2c/busses/i2c-designware-platdrv.c  |  2 +-
+ 4 files changed, 23 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-designware-baytrail.c b/drivers/i2c/busses/i2c-designware-baytrail.c
+index a3f581c..938ff3b 100644
 --- a/drivers/i2c/busses/i2c-designware-baytrail.c
 +++ b/drivers/i2c/busses/i2c-designware-baytrail.c
-@@ -23,13 +23,14 @@
+@@ -22,7 +22,8 @@
  #include "i2c-designware-core.h"
  
  #define SEMAPHORE_TIMEOUT	100
@@ -10,76 +28,11 @@
  #define PUNIT_SEMAPHORE_BIT	BIT(0)
  #define PUNIT_SEMAPHORE_ACQUIRE	BIT(1)
  
- static unsigned long acquired;
- 
--static int get_sem(struct device *dev, u32 *sem)
-+static int get_sem(struct dw_i2c_dev *dev, u32 *sem)
- {
- 	u32 data;
- 	int ret;
-@@ -37,7 +38,7 @@
- 	ret = iosf_mbi_read(BT_MBI_UNIT_PMC, BT_MBI_BUNIT_READ, PUNIT_SEMAPHORE,
- 				&data);
- 	if (ret) {
--		dev_err(dev, "iosf failed to read punit semaphore\n");
-+		dev_err(dev->dev, "iosf failed to read punit semaphore\n");
- 		return ret;
- 	}
- 
-@@ -46,20 +47,20 @@
- 	return 0;
- }
- 
--static void reset_semaphore(struct device *dev)
-+static void reset_semaphore(struct dw_i2c_dev *dev)
- {
- 	u32 data;
- 
- 	if (iosf_mbi_read(BT_MBI_UNIT_PMC, BT_MBI_BUNIT_READ,
- 				PUNIT_SEMAPHORE, &data)) {
--		dev_err(dev, "iosf failed to reset punit semaphore during read\n");
-+		dev_err(dev->dev, "iosf failed to reset punit semaphore during read\n");
- 		return;
- 	}
- 
- 	data &= ~PUNIT_SEMAPHORE_BIT;
- 	if (iosf_mbi_write(BT_MBI_UNIT_PMC, BT_MBI_BUNIT_WRITE,
- 				PUNIT_SEMAPHORE, data))
--		dev_err(dev, "iosf failed to reset punit semaphore during write\n");
-+		dev_err(dev->dev, "iosf failed to reset punit semaphore during write\n");
- }
- 
- static int baytrail_i2c_acquire(struct dw_i2c_dev *dev)
-@@ -88,7 +89,7 @@
- 	start = jiffies;
- 	end = start + msecs_to_jiffies(SEMAPHORE_TIMEOUT);
- 	do {
--		ret = get_sem(dev->dev, &sem);
-+		ret = get_sem(dev, &sem);
- 		if (!ret && sem) {
- 			acquired = jiffies;
- 			dev_dbg(dev->dev, "punit semaphore acquired after %ums\n",
-@@ -100,7 +101,7 @@
- 	} while (time_before(jiffies, end));
- 
- 	dev_err(dev->dev, "punit semaphore timed out, resetting\n");
--	reset_semaphore(dev->dev);
-+	reset_semaphore(dev);
- 
- 	ret = iosf_mbi_read(BT_MBI_UNIT_PMC, BT_MBI_BUNIT_READ,
- 				PUNIT_SEMAPHORE, &sem);
-@@ -122,7 +123,7 @@
- 	if (!dev->acquire_lock)
- 		return;
- 
--	reset_semaphore(dev->dev);
-+	reset_semaphore(dev);
- 	dev_dbg(dev->dev, "punit semaphore held for %ums\n",
- 		jiffies_to_msecs(jiffies - acquired));
- }
+diff --git a/drivers/i2c/busses/i2c-designware-core.h b/drivers/i2c/busses/i2c-designware-core.h
+index 0d44d2a..4a66959 100644
 --- a/drivers/i2c/busses/i2c-designware-core.h
 +++ b/drivers/i2c/busses/i2c-designware-core.h
-@@ -112,6 +112,8 @@
+@@ -123,6 +123,8 @@ struct dw_i2c_dev {
  #define ACCESS_SWAP		0x00000001
  #define ACCESS_16BIT		0x00000002
  #define ACCESS_INTR_MASK	0x00000004
@@ -88,17 +41,19 @@
  
  extern int i2c_dw_init(struct dw_i2c_dev *dev);
  extern void i2c_dw_disable(struct dw_i2c_dev *dev);
+diff --git a/drivers/i2c/busses/i2c-designware-pcidrv.c b/drivers/i2c/busses/i2c-designware-pcidrv.c
+index 96f8230..d774bab 100644
 --- a/drivers/i2c/busses/i2c-designware-pcidrv.c
 +++ b/drivers/i2c/busses/i2c-designware-pcidrv.c
-@@ -49,6 +49,7 @@
- 	medfield_5,
- 
+@@ -45,6 +45,7 @@ enum dw_pci_ctl_id_t {
+ 	medfield,
+ 	merrifield,
  	baytrail,
 +	cherrytrail,
  	haswell,
  };
  
-@@ -157,6 +158,14 @@
+@@ -174,6 +175,14 @@ static struct dw_pci_controller dw_pci_controllers[] = {
  		.functionality = I2C_FUNC_10BIT_ADDR,
  		.scl_sda_cfg = &hsw_config,
  	},
@@ -113,16 +68,16 @@
  };
  
  #ifdef CONFIG_PM
-@@ -226,6 +235,8 @@
+@@ -241,6 +250,8 @@ static int i2c_dw_pci_probe(struct pci_dev *pdev,
+ 	dev->base = pcim_iomap_table(pdev)[0];
+ 	dev->dev = &pdev->dev;
  	dev->irq = pdev->irq;
- 	dev->functionality = controller->functionality |
- 				DW_DEFAULT_FUNCTIONALITY;
 +	if (id->driver_data == cherrytrail)
 +		dev->accessor_flags |= ACCESS_IS_CHERRYTRAIL;
  
- 	dev->master_cfg = controller->bus_cfg;
- 	if (controller->scl_sda_cfg) {
-@@ -294,13 +305,13 @@
+ 	if (controller->setup) {
+ 		r = controller->setup(pdev, controller);
+@@ -321,13 +332,13 @@ static const struct pci_device_id i2_designware_pci_ids[] = {
  	{ PCI_VDEVICE(INTEL, 0x9c61), haswell },
  	{ PCI_VDEVICE(INTEL, 0x9c62), haswell },
  	/* Braswell / Cherrytrail */
@@ -143,14 +98,19 @@
  	{ 0,}
  };
  MODULE_DEVICE_TABLE(pci, i2_designware_pci_ids);
+diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
+index 0b42a12..8974467 100644
 --- a/drivers/i2c/busses/i2c-designware-platdrv.c
 +++ b/drivers/i2c/busses/i2c-designware-platdrv.c
-@@ -121,7 +121,7 @@
+@@ -123,7 +123,7 @@ static const struct acpi_device_id dw_i2c_acpi_match[] = {
  	{ "INT3432", 0 },
  	{ "INT3433", 0 },
  	{ "80860F41", 0 },
 -	{ "808622C1", 0 },
 +	{ "808622C1", ACCESS_IS_CHERRYTRAIL },
  	{ "AMD0010", ACCESS_INTR_MASK },
- 	{ }
- };
+ 	{ "AMDI0010", ACCESS_INTR_MASK },
+ 	{ "AMDI0510", 0 },
+-- 
+2.9.3
+

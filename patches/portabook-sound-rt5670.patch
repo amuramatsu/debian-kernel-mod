@@ -12,7 +12,7 @@
  	{}
  };
  
-+static int use_braswell = 1;
++static bool use_braswell = true;
 +module_param(use_braswell, bool, 0644);
 +MODULE_PARM_DESC(use_braswell, "use braswell parameter");
 +
