@@ -1,6 +1,6 @@
 --- a/drivers/i2c/i2c-core.c
 +++ b/drivers/i2c/i2c-core.c
-@@ -190,6 +190,18 @@
+@@ -230,6 +230,18 @@
  				     struct acpi_device *adev,
  				     struct i2c_board_info *info)
  {

@@ -1,7 +1,7 @@
 diff -ru a/drivers/gpu/drm/i915/i915_params.c b/drivers/gpu/drm/i915/i915_params.c
---- a/drivers/gpu/drm/i915/i915_params.c
-+++ b/drivers/gpu/drm/i915/i915_params.c
-@@ -61,6 +61,10 @@
+--- a/drivers/gpu/drm/i915/i915_params.c	2017-02-20 07:34:00.000000000 +0900
++++ b/drivers/gpu/drm/i915/i915_params.c	2017-07-22 22:08:26.116980654 +0900
+@@ -63,6 +63,10 @@
  	.inject_load_failure = 0,
  	.enable_dpcd_backlight = false,
  	.enable_gvt = false,
@@ -12,7 +12,7 @@ diff -ru a/drivers/gpu/drm/i915/i915_params.c b/drivers/gpu/drm/i915/i915_params
  };
  
  module_param_named(modeset, i915.modeset, int, 0400);
-@@ -227,3 +231,16 @@
+@@ -243,3 +247,16 @@
  module_param_named(enable_gvt, i915.enable_gvt, bool, 0400);
  MODULE_PARM_DESC(enable_gvt,
  	"Enable support for Intel GVT-g graphics virtualization host support(default:false)");
@@ -30,9 +30,9 @@ diff -ru a/drivers/gpu/drm/i915/i915_params.c b/drivers/gpu/drm/i915/i915_params
 +MODULE_PARM_DESC(guard_clock_force,
 +	"Set GPU guard clock force (-1=default)");
 diff -ru a/drivers/gpu/drm/i915/i915_params.h b/drivers/gpu/drm/i915/i915_params.h
---- a/drivers/gpu/drm/i915/i915_params.h
-+++ b/drivers/gpu/drm/i915/i915_params.h
-@@ -64,6 +64,10 @@
+--- a/drivers/gpu/drm/i915/i915_params.h	2017-02-20 07:34:00.000000000 +0900
++++ b/drivers/gpu/drm/i915/i915_params.h	2017-07-22 22:08:26.120980524 +0900
+@@ -66,6 +66,10 @@
  	bool enable_dp_mst;
  	bool enable_dpcd_backlight;
  	bool enable_gvt;
@@ -44,12 +44,12 @@ diff -ru a/drivers/gpu/drm/i915/i915_params.h b/drivers/gpu/drm/i915/i915_params
  
  extern struct i915_params i915 __read_mostly;
 diff -ru a/drivers/gpu/drm/i915/intel_pm.c b/drivers/gpu/drm/i915/intel_pm.c
---- a/drivers/gpu/drm/i915/intel_pm.c
-+++ b/drivers/gpu/drm/i915/intel_pm.c
-@@ -5273,15 +5273,39 @@
+--- a/drivers/gpu/drm/i915/intel_pm.c	2017-07-22 21:32:34.000000000 +0900
++++ b/drivers/gpu/drm/i915/intel_pm.c	2017-07-22 22:11:39.446695175 +0900
+@@ -5263,15 +5263,39 @@
  	/* static values from HW: RP0 > RP1 > RPn (min_freq) */
  	if (IS_BROXTON(dev_priv)) {
- 		rp_state_cap = I915_READ(BXT_RP_STATE_CAP);
+ 		u32 rp_state_cap = I915_READ(BXT_RP_STATE_CAP);
 -		dev_priv->rps.rp0_freq = (rp_state_cap >> 16) & 0xff;
 -		dev_priv->rps.rp1_freq = (rp_state_cap >>  8) & 0xff;
 -		dev_priv->rps.min_freq = (rp_state_cap >>  0) & 0xff;
@@ -66,10 +66,11 @@ diff -ru a/drivers/gpu/drm/i915/intel_pm.c b/drivers/gpu/drm/i915/intel_pm.c
 +		else
 +			dev_priv->rps.min_freq = (rp_state_cap >>  0) & 0xff;
  	} else {
- 		rp_state_cap = I915_READ(GEN6_RP_STATE_CAP);
+ 		u32 rp_state_cap = I915_READ(GEN6_RP_STATE_CAP);
 -		dev_priv->rps.rp0_freq = (rp_state_cap >>  0) & 0xff;
 -		dev_priv->rps.rp1_freq = (rp_state_cap >>  8) & 0xff;
 -		dev_priv->rps.min_freq = (rp_state_cap >> 16) & 0xff;
+-	}
 +		if (i915.max_clock_force > 0)
 +			dev_priv->rps.rp0_freq = i915.max_clock_force / 50;
 +		else
@@ -82,17 +83,17 @@ diff -ru a/drivers/gpu/drm/i915/intel_pm.c b/drivers/gpu/drm/i915/intel_pm.c
 +			dev_priv->rps.min_freq = i915.min_clock_force / 50;
 +		else
 +			dev_priv->rps.min_freq = (rp_state_cap >> 16) & 0xff;
- 	}
++	}
 +	if (dev_priv->rps.min_freq > dev_priv->rps.rp0_freq)
 +		dev_priv->rps.min_freq = dev_priv->rps.rp0_freq;
 +	if (dev_priv->rps.rp1_freq > dev_priv->rps.rp0_freq)
 +		dev_priv->rps.rp1_freq = dev_priv->rps.rp0_freq;
 +	if (dev_priv->rps.rp1_freq < dev_priv->rps.min_freq)
 +		dev_priv->rps.rp1_freq = dev_priv->rps.min_freq;
- 
  	/* hw_max = RP0 until we check for overclocking */
- 	dev_priv->rps.max_freq		= dev_priv->rps.rp0_freq;
-@@ -5947,23 +5971,39 @@
+ 	dev_priv->rps.max_freq = dev_priv->rps.rp0_freq;
+ 
+@@ -5898,23 +5922,39 @@
  	}
  	DRM_DEBUG_DRIVER("DDR speed: %d MHz\n", dev_priv->mem_freq);
  
@@ -136,7 +137,7 @@ diff -ru a/drivers/gpu/drm/i915/intel_pm.c b/drivers/gpu/drm/i915/intel_pm.c
  	DRM_DEBUG_DRIVER("min GPU freq: %d MHz (%u)\n",
  			 intel_gpu_freq(dev_priv, dev_priv->rps.min_freq),
  			 dev_priv->rps.min_freq);
-@@ -6004,24 +6044,40 @@
+@@ -5942,24 +5982,40 @@
  	}
  	DRM_DEBUG_DRIVER("DDR speed: %d MHz\n", dev_priv->mem_freq);
  
