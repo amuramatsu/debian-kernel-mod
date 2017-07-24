@@ -1,14 +1,6 @@
---- a/sound/soc/codecs/rt5670.c
-+++ b/sound/soc/codecs/rt5670.c
-@@ -2810,6 +2810,7 @@
- #ifdef CONFIG_ACPI
- static const struct acpi_device_id rt5670_acpi_match[] = {
- 	{ "10EC5670", 0},
-+	{ "10EC5672", 0},
- 	{ },
- };
- MODULE_DEVICE_TABLE(acpi, rt5670_acpi_match);
-@@ -2826,6 +2827,10 @@
+--- a/sound/soc/codecs/rt5670.c	2017-07-22 21:32:34.000000000 +0900
++++ b/sound/soc/codecs/rt5670.c	2017-07-22 22:01:58.745544676 +0900
+@@ -2838,6 +2838,10 @@
  	{}
  };
  
@@ -19,7 +11,7 @@
  static int rt5670_i2c_probe(struct i2c_client *i2c,
  		    const struct i2c_device_id *id)
  {
-@@ -2845,7 +2850,8 @@
+@@ -2857,7 +2861,8 @@
  	if (pdata)
  		rt5670->pdata = *pdata;
  

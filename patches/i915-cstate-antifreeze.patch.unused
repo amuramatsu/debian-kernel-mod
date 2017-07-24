@@ -1,39 +1,23 @@
-diff --git a/drivers/gpu/drm/i915/i915_irq.c b/drivers/gpu/drm/i915/i915_irq.c
-index 93ad21e..efd5ffe 100644
---- a/drivers/gpu/drm/i915/i915_irq.c
-+++ b/drivers/gpu/drm/i915/i915_irq.c
-@@ -4685,11 +4685,7 @@ void intel_irq_init(struct drm_i915_private *dev_priv)
- 	INIT_WORK(&dev_priv->l3_parity.error_work, ivybridge_parity_work);
+diff -ru a/drivers/gpu/drm/i915/i915_irq.c b/drivers/gpu/drm/i915/i915_irq.c
+--- a/drivers/gpu/drm/i915/i915_irq.c	2017-07-23 23:04:42.243922152 +0900
++++ b/drivers/gpu/drm/i915/i915_irq.c	2017-07-24 00:15:59.694024516 +0900
+@@ -4159,11 +4159,7 @@
+ 		dev_priv->pm_guc_events = GEN9_GUC_TO_HOST_INT_EVENT;
  
  	/* Let's track the enabled rps events */
 -	if (IS_VALLEYVIEW(dev_priv))
 -		/* WaGsvRC0ResidencyMethod:vlv */
--		dev_priv->pm_rps_events = GEN6_PM_RP_DOWN_EI_EXPIRED | GEN6_PM_RP_UP_EI_EXPIRED;
+-		dev_priv->pm_rps_events = GEN6_PM_RP_UP_EI_EXPIRED;
 -	else
 -		dev_priv->pm_rps_events = GEN6_PM_RPS_EVENTS;
 +	dev_priv->pm_rps_events = GEN6_PM_RPS_EVENTS;
  
  	dev_priv->rps.pm_intr_keep = 0;
  
-diff --git a/drivers/gpu/drm/i915/intel_pm.c b/drivers/gpu/drm/i915/intel_pm.c
-index 90fe669..84a56b7 100644
---- a/drivers/gpu/drm/i915/intel_pm.c
-+++ b/drivers/gpu/drm/i915/intel_pm.c
-@@ -4901,6 +4901,13 @@ static void gen6_set_rps_thresholds(struct drm_i915_private *dev_priv, u8 val)
- 		break;
- 	}
- 
-+	if (IS_VALLEYVIEW(dev_priv)) {
-+		ei_up = 64000;
-+		ei_down = 64000;
-+		threshold_up = 90;
-+		threshold_down = 70;
-+	}
-+
- 	I915_WRITE(GEN6_RP_UP_EI,
- 		   GT_INTERVAL_FROM_US(dev_priv, ei_up));
- 	I915_WRITE(GEN6_RP_UP_THRESHOLD,
-@@ -4998,22 +5005,28 @@ static void valleyview_set_rps(struct drm_i915_private *dev_priv, u8 val)
+diff -ru a/drivers/gpu/drm/i915/intel_pm.c b/drivers/gpu/drm/i915/intel_pm.c
+--- a/drivers/gpu/drm/i915/intel_pm.c	2017-07-23 23:04:43.459881602 +0900
++++ b/drivers/gpu/drm/i915/intel_pm.c	2017-07-24 00:14:08.702461795 +0900
+@@ -4981,22 +4981,28 @@
  	I915_WRITE(GEN6_PMINTRMSK, gen6_rps_pm_mask(dev_priv, val));
  
  	if (val != dev_priv->rps.cur_freq) {
@@ -69,7 +53,7 @@ index 90fe669..84a56b7 100644
  static void vlv_set_rps_idle(struct drm_i915_private *dev_priv)
  {
  	u32 val = dev_priv->rps.idle_freq;
-@@ -5021,11 +5034,7 @@ static void vlv_set_rps_idle(struct drm_i915_private *dev_priv)
+@@ -5004,11 +5010,7 @@
  	if (dev_priv->rps.cur_freq <= val)
  		return;
  
