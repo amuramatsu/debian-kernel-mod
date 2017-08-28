@@ -1,6 +1,6 @@
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/Makefile b/drivers/gpu/drm/i915/Makefile
 --- a/drivers/gpu/drm/i915/Makefile	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/Makefile	2017-07-25 00:14:46.491478978 +0900
++++ b/drivers/gpu/drm/i915/Makefile	2017-08-29 00:13:32.068929822 +0900
 @@ -24,7 +24,7 @@
  	  intel_runtime_pm.o
  
@@ -12,7 +12,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/Makefile b/drivers/gpu/drm/i915/
  i915-y += i915_cmd_parser.o \
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/gvt/cmd_parser.c b/drivers/gpu/drm/i915/gvt/cmd_parser.c
 --- a/drivers/gpu/drm/i915/gvt/cmd_parser.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/gvt/cmd_parser.c	2017-07-28 00:24:27.649851784 +0900
++++ b/drivers/gpu/drm/i915/gvt/cmd_parser.c	2017-08-29 00:13:32.076929793 +0900
 @@ -1598,7 +1598,7 @@
  		return -ENOMEM;
  
@@ -42,7 +42,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/gvt/cmd_parser.c b/drivers/gpu/d
  	if (IS_ERR(obj))
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/gvt/gvt.h b/drivers/gpu/drm/i915/gvt/gvt.h
 --- a/drivers/gpu/drm/i915/gvt/gvt.h	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/gvt/gvt.h	2017-07-28 00:01:36.866524801 +0900
++++ b/drivers/gpu/drm/i915/gvt/gvt.h	2017-08-29 00:13:32.100929709 +0900
 @@ -231,6 +231,7 @@
  	struct intel_gvt_gtt gtt;
  	struct intel_gvt_opregion opregion;
@@ -52,8 +52,8 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/gvt/gvt.h b/drivers/gpu/drm/i915
  	struct intel_vgpu_type *types;
  	unsigned int num_types;
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/gvt/handlers.c b/drivers/gpu/drm/i915/gvt/handlers.c
---- a/drivers/gpu/drm/i915/gvt/handlers.c	2017-07-23 23:04:42.055928421 +0900
-+++ b/drivers/gpu/drm/i915/gvt/handlers.c	2017-07-27 23:34:30.485928421 +0900
+--- a/drivers/gpu/drm/i915/gvt/handlers.c	2017-08-29 00:06:09.770511970 +0900
++++ b/drivers/gpu/drm/i915/gvt/handlers.c	2017-08-29 00:13:32.112929666 +0900
 @@ -2167,7 +2167,7 @@
  	MMIO_DFH(0x1217c, D_ALL, F_CMD_ACCESS, NULL, NULL);
  
@@ -65,7 +65,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/gvt/handlers.c b/drivers/gpu/drm
  	MMIO_F(0x5200, 32, 0, 0, 0, D_ALL, NULL, NULL);
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/gvt/scheduler.c b/drivers/gpu/drm/i915/gvt/scheduler.c
 --- a/drivers/gpu/drm/i915/gvt/scheduler.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/gvt/scheduler.c	2017-07-28 00:09:35.263751586 +0900
++++ b/drivers/gpu/drm/i915/gvt/scheduler.c	2017-08-29 00:13:32.132929596 +0900
 @@ -127,18 +127,24 @@
  	return 0;
  }
@@ -345,7 +345,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/gvt/scheduler.c b/drivers/gpu/dr
  }
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_cmd_parser.c b/drivers/gpu/drm/i915/i915_cmd_parser.c
 --- a/drivers/gpu/drm/i915/i915_cmd_parser.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/i915_cmd_parser.c	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/i915_cmd_parser.c	2017-08-29 00:13:32.140929568 +0900
 @@ -86,6 +86,102 @@
   * general bitmasking mechanism.
   */
@@ -614,7 +614,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_cmd_parser.c b/drivers/gpu/
  }
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_debugfs.c b/drivers/gpu/drm/i915/i915_debugfs.c
 --- a/drivers/gpu/drm/i915/i915_debugfs.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/i915_debugfs.c	2017-07-26 02:59:47.368558750 +0900
++++ b/drivers/gpu/drm/i915/i915_debugfs.c	2017-08-29 00:13:32.168929469 +0900
 @@ -26,19 +26,9 @@
   *
   */
@@ -1973,8 +1973,8 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_debugfs.c b/drivers/gpu/drm
  	for (i = 0; i < ARRAY_SIZE(i915_debugfs_files); i++) {
  		struct drm_info_list *info_list =
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_drv.c b/drivers/gpu/drm/i915/i915_drv.c
---- a/drivers/gpu/drm/i915/i915_drv.c	2017-07-23 23:04:42.099926953 +0900
-+++ b/drivers/gpu/drm/i915/i915_drv.c	2017-07-25 03:41:18.238332484 +0900
+--- a/drivers/gpu/drm/i915/i915_drv.c	2017-08-29 00:06:10.402509632 +0900
++++ b/drivers/gpu/drm/i915/i915_drv.c	2017-08-29 00:13:32.176929441 +0900
 @@ -142,9 +142,8 @@
  	return ret;
  }
@@ -2593,8 +2593,8 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_drv.c b/drivers/gpu/drm/i91
  	DRM_IOCTL_DEF_DRV(I915_GET_PIPE_FROM_CRTC_ID, intel_get_pipe_from_crtc_id, 0),
  	DRM_IOCTL_DEF_DRV(I915_GEM_MADVISE, i915_gem_madvise_ioctl, DRM_RENDER_ALLOW),
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_drv.h b/drivers/gpu/drm/i915/i915_drv.h
---- a/drivers/gpu/drm/i915/i915_drv.h	2017-07-23 23:04:42.119926287 +0900
-+++ b/drivers/gpu/drm/i915/i915_drv.h	2017-07-25 20:25:18.865794801 +0900
+--- a/drivers/gpu/drm/i915/i915_drv.h	2017-08-29 00:06:10.598508908 +0900
++++ b/drivers/gpu/drm/i915/i915_drv.h	2017-08-29 00:13:32.228929257 +0900
 @@ -49,9 +49,11 @@
  #include <drm/drm_legacy.h> /* for struct drm_dma_handle */
  #include <drm/drm_gem.h>
@@ -3754,8 +3754,8 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_drv.h b/drivers/gpu/drm/i91
 -
  #endif
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem.c b/drivers/gpu/drm/i915/i915_gem.c
---- a/drivers/gpu/drm/i915/i915_gem.c	2017-07-23 23:04:42.139925620 +0900
-+++ b/drivers/gpu/drm/i915/i915_gem.c	2017-07-27 07:22:10.968359953 +0900
+--- a/drivers/gpu/drm/i915/i915_gem.c	2017-08-29 00:06:10.634508774 +0900
++++ b/drivers/gpu/drm/i915/i915_gem.c	2017-08-29 00:13:32.256929158 +0900
 @@ -38,6 +38,7 @@
  #include <linux/reservation.h>
  #include <linux/shmem_fs.h>
@@ -4799,7 +4799,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem.c b/drivers/gpu/drm/i91
  
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem.h b/drivers/gpu/drm/i915/i915_gem.h
 --- a/drivers/gpu/drm/i915/i915_gem.h	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/i915_gem.h	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/i915_gem.h	2017-08-29 00:13:32.276929088 +0900
 @@ -27,8 +27,10 @@
  
  #ifdef CONFIG_DRM_I915_DEBUG_GEM
@@ -4814,7 +4814,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem.h b/drivers/gpu/drm/i91
  #define I915_NUM_ENGINES 5
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_context.c b/drivers/gpu/drm/i915/i915_gem_context.c
 --- a/drivers/gpu/drm/i915/i915_gem_context.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/i915_gem_context.c	2017-07-26 03:17:51.554976483 +0900
++++ b/drivers/gpu/drm/i915/i915_gem_context.c	2017-08-29 00:13:32.292929031 +0900
 @@ -97,7 +97,7 @@
   * part. It should be safe to decrease this, but it's more future proof as is.
   */
@@ -5419,7 +5419,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_context.c b/drivers/gpu
  
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_context.h b/drivers/gpu/drm/i915/i915_gem_context.h
 --- a/drivers/gpu/drm/i915/i915_gem_context.h	1970-01-01 09:00:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/i915_gem_context.h	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/i915_gem_context.h	2017-08-29 00:13:32.296929017 +0900
 @@ -0,0 +1,274 @@
 +/*
 + * Copyright © 2016 Intel Corporation
@@ -5697,7 +5697,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_context.h b/drivers/gpu
 +#endif /* !__I915_GEM_CONTEXT_H__ */
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_dmabuf.c b/drivers/gpu/drm/i915/i915_gem_dmabuf.c
 --- a/drivers/gpu/drm/i915/i915_gem_dmabuf.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/i915_gem_dmabuf.c	2017-07-26 03:25:05.879838434 +0900
++++ b/drivers/gpu/drm/i915/i915_gem_dmabuf.c	2017-08-29 00:13:32.300929003 +0900
 @@ -278,7 +278,7 @@
  
  	get_dma_buf(dma_buf);
@@ -5709,7 +5709,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_dmabuf.c b/drivers/gpu/
  		goto fail_detach;
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_evict.c b/drivers/gpu/drm/i915/i915_gem_evict.c
 --- a/drivers/gpu/drm/i915/i915_gem_evict.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/i915_gem_evict.c	2017-07-26 20:02:23.430435743 +0900
++++ b/drivers/gpu/drm/i915/i915_gem_evict.c	2017-08-29 00:13:32.308928975 +0900
 @@ -96,7 +96,7 @@
  			 u64 start, u64 end,
  			 unsigned flags)
@@ -5906,8 +5906,8 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_evict.c b/drivers/gpu/d
  		if (i915_is_ggtt(vm)) {
  			ret = i915_gem_switch_to_kernel_context(dev_priv);
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_execbuffer.c b/drivers/gpu/drm/i915/i915_gem_execbuffer.c
---- a/drivers/gpu/drm/i915/i915_gem_execbuffer.c	2017-07-23 23:04:42.167924686 +0900
-+++ b/drivers/gpu/drm/i915/i915_gem_execbuffer.c	2017-07-26 21:10:10.095557020 +0900
+--- a/drivers/gpu/drm/i915/i915_gem_execbuffer.c	2017-08-29 00:06:10.662508670 +0900
++++ b/drivers/gpu/drm/i915/i915_gem_execbuffer.c	2017-08-29 00:13:32.320928932 +0900
 @@ -184,7 +184,7 @@
  		 * from the (obj, vm) we don't run the risk of creating
  		 * duplicated vmas for the same vm.
@@ -5997,7 +5997,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_execbuffer.c b/drivers/
  		vma = i915_gem_execbuffer_parse(engine, &shadow_exec_entry,
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_fence_reg.c b/drivers/gpu/drm/i915/i915_gem_fence_reg.c
 --- a/drivers/gpu/drm/i915/i915_gem_fence_reg.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/i915_gem_fence_reg.c	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/i915_gem_fence_reg.c	2017-08-29 00:13:32.332928890 +0900
 @@ -77,16 +77,17 @@
  
  	val = 0;
@@ -6179,7 +6179,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_fence_reg.c b/drivers/g
  		/* On 9xx chipsets, channel interleave by the CPU is
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_fence_reg.h b/drivers/gpu/drm/i915/i915_gem_fence_reg.h
 --- a/drivers/gpu/drm/i915/i915_gem_fence_reg.h	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/i915_gem_fence_reg.h	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/i915_gem_fence_reg.h	2017-08-29 00:13:32.340928862 +0900
 @@ -30,6 +30,8 @@
  struct drm_i915_private;
  struct i915_vma;
@@ -6190,8 +6190,8 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_fence_reg.h b/drivers/g
  	struct list_head link;
  	struct drm_i915_private *i915;
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm/i915/i915_gem_gtt.c
---- a/drivers/gpu/drm/i915/i915_gem_gtt.c	2017-07-23 23:04:42.179924286 +0900
-+++ b/drivers/gpu/drm/i915/i915_gem_gtt.c	2017-07-27 06:25:48.856207077 +0900
+--- a/drivers/gpu/drm/i915/i915_gem_gtt.c	2017-08-29 00:06:10.686508581 +0900
++++ b/drivers/gpu/drm/i915/i915_gem_gtt.c	2017-08-29 00:15:56.396443987 +0900
 @@ -23,10 +23,14 @@
   *
   */
@@ -6373,18 +6373,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  }
  
  /* Removes entries from a single page table, releasing it if it's empty.
-@@ -735,10 +755,6 @@
- 	GEM_BUG_ON(pte_end > GEN8_PTES);
- 
- 	bitmap_clear(pt->used_ptes, pte, num_entries);
--	if (USES_FULL_PPGTT(vm->i915)) {
--		if (bitmap_empty(pt->used_ptes, GEN8_PTES))
--			return true;
--	}
- 
- 	pt_vaddr = kmap_px(pt);
- 
-@@ -774,13 +790,10 @@
+@@ -770,7 +790,7 @@
  			pde_vaddr = kmap_px(pd);
  			pde_vaddr[pde] = scratch_pde;
  			kunmap_px(ppgtt, pde_vaddr);
@@ -6393,13 +6382,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  		}
  	}
  
--	if (bitmap_empty(pd->used_pdes, I915_PDES))
--		return true;
--
- 	return false;
- }
- 
-@@ -795,9 +808,6 @@
+@@ -788,9 +808,6 @@
  	struct i915_hw_ppgtt *ppgtt = i915_vm_to_ppgtt(vm);
  	struct i915_page_directory *pd;
  	uint64_t pdpe;
@@ -6409,7 +6392,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  
  	gen8_for_each_pdpe(pd, pdp, start, length, pdpe) {
  		if (WARN_ON(!pdp->page_directory[pdpe]))
-@@ -805,20 +815,13 @@
+@@ -798,12 +815,8 @@
  
  		if (gen8_ppgtt_clear_pd(vm, pd, start, length)) {
  			__clear_bit(pdpe, pdp->used_pdpes);
@@ -6424,15 +6407,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  		}
  	}
  
- 	mark_tlbs_dirty(ppgtt);
- 
--	if (bitmap_empty(pdp->used_pdpes, I915_PDPES_PER_PDP(dev_priv)))
--		return true;
--
- 	return false;
- }
- 
-@@ -831,15 +834,11 @@
+@@ -821,15 +834,11 @@
  				  uint64_t start,
  				  uint64_t length)
  {
@@ -6449,7 +6424,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  
  	gen8_for_each_pml4e(pdp, pml4, start, length, pml4e) {
  		if (WARN_ON(!pml4->pdps[pml4e]))
-@@ -847,10 +846,8 @@
+@@ -837,10 +846,8 @@
  
  		if (gen8_ppgtt_clear_pdp(vm, pdp, start, length)) {
  			__clear_bit(pml4e, pml4->used_pml4es);
@@ -6462,7 +6437,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  		}
  	}
  }
-@@ -860,7 +857,7 @@
+@@ -850,7 +857,7 @@
  {
  	struct i915_hw_ppgtt *ppgtt = i915_vm_to_ppgtt(vm);
  
@@ -6471,7 +6446,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  		gen8_ppgtt_clear_pml4(vm, &ppgtt->pml4, start, length);
  	else
  		gen8_ppgtt_clear_pdp(vm, &ppgtt->pdp, start, length);
-@@ -895,7 +892,7 @@
+@@ -885,7 +892,7 @@
  			kunmap_px(ppgtt, pt_vaddr);
  			pt_vaddr = NULL;
  			if (++pde == I915_PDES) {
@@ -6480,7 +6455,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  					break;
  				pde = 0;
  			}
-@@ -918,7 +915,7 @@
+@@ -908,7 +915,7 @@
  
  	__sg_page_iter_start(&sg_iter, pages->sgl, sg_nents(pages->sgl), 0);
  
@@ -6489,7 +6464,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  		gen8_ppgtt_insert_pte_entries(vm, &ppgtt->pdp, &sg_iter, start,
  					      cache_level);
  	} else {
-@@ -952,7 +949,7 @@
+@@ -942,7 +949,7 @@
  
  static int gen8_init_scratch(struct i915_address_space *vm)
  {
@@ -6498,7 +6473,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  	int ret;
  
  	ret = setup_scratch_page(dev_priv, &vm->scratch_page, I915_GFP_DMA);
-@@ -999,7 +996,7 @@
+@@ -989,7 +996,7 @@
  static int gen8_ppgtt_notify_vgt(struct i915_hw_ppgtt *ppgtt, bool create)
  {
  	enum vgt_g2v_type msg;
@@ -6507,7 +6482,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  	int i;
  
  	if (USES_FULL_48BIT_PPGTT(dev_priv)) {
-@@ -1029,7 +1026,7 @@
+@@ -1019,7 +1026,7 @@
  
  static void gen8_free_scratch(struct i915_address_space *vm)
  {
@@ -6516,7 +6491,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  
  	if (USES_FULL_48BIT_PPGTT(dev_priv))
  		free_pdp(dev_priv, vm->scratch_pdp);
-@@ -1056,7 +1053,7 @@
+@@ -1046,7 +1053,7 @@
  
  static void gen8_ppgtt_cleanup_4lvl(struct i915_hw_ppgtt *ppgtt)
  {
@@ -6525,7 +6500,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  	int i;
  
  	for_each_set_bit(i, ppgtt->pml4.used_pml4es, GEN8_PML4ES_PER_PML4) {
-@@ -1071,7 +1068,7 @@
+@@ -1061,7 +1068,7 @@
  
  static void gen8_ppgtt_cleanup(struct i915_address_space *vm)
  {
@@ -6534,7 +6509,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  	struct i915_hw_ppgtt *ppgtt = i915_vm_to_ppgtt(vm);
  
  	if (intel_vgpu_active(dev_priv))
-@@ -1109,7 +1106,7 @@
+@@ -1099,7 +1106,7 @@
  				     uint64_t length,
  				     unsigned long *new_pts)
  {
@@ -6543,7 +6518,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  	struct i915_page_table *pt;
  	uint32_t pde;
  
-@@ -1170,7 +1167,7 @@
+@@ -1160,7 +1167,7 @@
  				  uint64_t length,
  				  unsigned long *new_pds)
  {
@@ -6552,7 +6527,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  	struct i915_page_directory *pd;
  	uint32_t pdpe;
  	uint32_t pdpes = I915_PDPES_PER_PDP(dev_priv);
-@@ -1223,7 +1220,7 @@
+@@ -1213,7 +1220,7 @@
  				  uint64_t length,
  				  unsigned long *new_pdps)
  {
@@ -6561,7 +6536,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  	struct i915_page_directory_pointer *pdp;
  	uint32_t pml4e;
  
-@@ -1298,7 +1295,7 @@
+@@ -1288,7 +1295,7 @@
  {
  	struct i915_hw_ppgtt *ppgtt = i915_vm_to_ppgtt(vm);
  	unsigned long *new_page_dirs, *new_page_tables;
@@ -6570,7 +6545,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  	struct i915_page_directory *pd;
  	const uint64_t orig_start = start;
  	const uint64_t orig_length = length;
-@@ -1306,15 +1303,6 @@
+@@ -1296,15 +1303,6 @@
  	uint32_t pdpes = I915_PDPES_PER_PDP(dev_priv);
  	int ret;
  
@@ -6586,7 +6561,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  	ret = alloc_gen8_temp_bitmaps(&new_page_dirs, &new_page_tables, pdpes);
  	if (ret)
  		return ret;
-@@ -1378,7 +1366,7 @@
+@@ -1368,7 +1366,7 @@
  
  		kunmap_px(ppgtt, page_directory);
  		__set_bit(pdpe, pdp->used_pdpes);
@@ -6595,7 +6570,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  	}
  
  	free_gen8_temp_bitmaps(new_page_dirs, new_page_tables);
-@@ -1437,7 +1425,7 @@
+@@ -1427,7 +1425,7 @@
  		if (ret)
  			goto err_out;
  
@@ -6604,7 +6579,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  	}
  
  	bitmap_or(pml4->used_pml4es, new_pdps, pml4->used_pml4es,
-@@ -1447,7 +1435,7 @@
+@@ -1437,7 +1435,7 @@
  
  err_out:
  	for_each_set_bit(pml4e, new_pdps, GEN8_PML4ES_PER_PML4)
@@ -6613,7 +6588,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  
  	return ret;
  }
-@@ -1457,7 +1445,7 @@
+@@ -1447,7 +1445,7 @@
  {
  	struct i915_hw_ppgtt *ppgtt = i915_vm_to_ppgtt(vm);
  
@@ -6622,7 +6597,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  		return gen8_alloc_va_range_4lvl(vm, &ppgtt->pml4, start, length);
  	else
  		return gen8_alloc_va_range_3lvl(vm, &ppgtt->pdp, start, length);
-@@ -1528,7 +1516,7 @@
+@@ -1518,7 +1516,7 @@
  	gen8_pte_t scratch_pte = gen8_pte_encode(vm->scratch_page.daddr,
  						 I915_CACHE_LLC);
  
@@ -6631,7 +6606,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  		gen8_dump_pdp(&ppgtt->pdp, start, length, scratch_pte, m);
  	} else {
  		uint64_t pml4e;
-@@ -1581,7 +1569,7 @@
+@@ -1571,7 +1569,7 @@
   */
  static int gen8_ppgtt_init(struct i915_hw_ppgtt *ppgtt)
  {
@@ -6640,7 +6615,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  	int ret;
  
  	ret = gen8_init_scratch(&ppgtt->base);
-@@ -1924,7 +1912,7 @@
+@@ -1914,7 +1912,7 @@
  			       uint64_t start_in, uint64_t length_in)
  {
  	DECLARE_BITMAP(new_page_tables, I915_PDES);
@@ -6649,7 +6624,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  	struct i915_ggtt *ggtt = &dev_priv->ggtt;
  	struct i915_hw_ppgtt *ppgtt = i915_vm_to_ppgtt(vm);
  	struct i915_page_table *pt;
-@@ -1932,9 +1920,6 @@
+@@ -1922,9 +1920,6 @@
  	uint32_t pde;
  	int ret;
  
@@ -6659,7 +6634,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  	start = start_save = start_in;
  	length = length_save = length_in;
  
-@@ -2011,7 +1996,7 @@
+@@ -2001,7 +1996,7 @@
  
  static int gen6_init_scratch(struct i915_address_space *vm)
  {
@@ -6668,7 +6643,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  	int ret;
  
  	ret = setup_scratch_page(dev_priv, &vm->scratch_page, I915_GFP_DMA);
-@@ -2031,7 +2016,7 @@
+@@ -2021,7 +2016,7 @@
  
  static void gen6_free_scratch(struct i915_address_space *vm)
  {
@@ -6677,7 +6652,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  
  	free_pt(dev_priv, vm->scratch_pt);
  	cleanup_scratch_page(dev_priv, &vm->scratch_page);
-@@ -2041,7 +2026,7 @@
+@@ -2031,7 +2026,7 @@
  {
  	struct i915_hw_ppgtt *ppgtt = i915_vm_to_ppgtt(vm);
  	struct i915_page_directory *pd = &ppgtt->pd;
@@ -6686,7 +6661,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  	struct i915_page_table *pt;
  	uint32_t pde;
  
-@@ -2057,9 +2042,8 @@
+@@ -2047,9 +2042,8 @@
  static int gen6_ppgtt_allocate_page_directories(struct i915_hw_ppgtt *ppgtt)
  {
  	struct i915_address_space *vm = &ppgtt->base;
@@ -6697,7 +6672,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  	int ret;
  
  	/* PPGTT PDEs reside in the GGTT and consists of 512 entries. The
-@@ -2072,29 +2056,14 @@
+@@ -2062,29 +2056,14 @@
  	if (ret)
  		return ret;
  
@@ -6732,7 +6707,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  	if (ppgtt->node.start < ggtt->mappable_end)
  		DRM_DEBUG("Forced to use aperture for PDEs\n");
  
-@@ -2122,7 +2091,7 @@
+@@ -2112,7 +2091,7 @@
  
  static int gen6_ppgtt_init(struct i915_hw_ppgtt *ppgtt)
  {
@@ -6741,7 +6716,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  	struct i915_ggtt *ggtt = &dev_priv->ggtt;
  	int ret;
  
-@@ -2173,7 +2142,7 @@
+@@ -2163,7 +2142,7 @@
  static int __hw_ppgtt_init(struct i915_hw_ppgtt *ppgtt,
  			   struct drm_i915_private *dev_priv)
  {
@@ -6750,7 +6725,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  
  	if (INTEL_INFO(dev_priv)->gen < 8)
  		return gen6_ppgtt_init(ppgtt);
-@@ -2282,6 +2251,27 @@
+@@ -2272,6 +2251,27 @@
  	return ppgtt;
  }
  
@@ -6778,7 +6753,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  void i915_ppgtt_release(struct kref *kref)
  {
  	struct i915_hw_ppgtt *ppgtt =
-@@ -2346,16 +2336,6 @@
+@@ -2336,16 +2336,6 @@
  		POSTING_READ(RING_FAULT_REG(dev_priv->engine[RCS]));
  }
  
@@ -6795,7 +6770,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  void i915_gem_suspend_gtt_mappings(struct drm_i915_private *dev_priv)
  {
  	struct i915_ggtt *ggtt = &dev_priv->ggtt;
-@@ -2370,16 +2350,30 @@
+@@ -2360,16 +2350,30 @@
  
  	ggtt->base.clear_range(&ggtt->base, ggtt->base.start, ggtt->base.total);
  
@@ -6831,7 +6806,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  
  	return -ENOSPC;
  }
-@@ -2395,15 +2389,13 @@
+@@ -2385,15 +2389,13 @@
  				  enum i915_cache_level level,
  				  u32 unused)
  {
@@ -6850,7 +6825,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  }
  
  static void gen8_ggtt_insert_entries(struct i915_address_space *vm,
-@@ -2411,7 +2403,6 @@
+@@ -2401,7 +2403,6 @@
  				     uint64_t start,
  				     enum i915_cache_level level, u32 unused)
  {
@@ -6858,7 +6833,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  	struct i915_ggtt *ggtt = i915_vm_to_ggtt(vm);
  	struct sgt_iter sgt_iter;
  	gen8_pte_t __iomem *gtt_entries;
-@@ -2440,8 +2431,7 @@
+@@ -2430,8 +2431,7 @@
  	 * want to flush the TLBs only after we're certain all the PTE updates
  	 * have finished.
  	 */
@@ -6868,7 +6843,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  }
  
  struct insert_entries {
-@@ -2476,15 +2466,13 @@
+@@ -2466,15 +2466,13 @@
  				  enum i915_cache_level level,
  				  u32 flags)
  {
@@ -6887,7 +6862,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  }
  
  /*
-@@ -2498,7 +2486,6 @@
+@@ -2488,7 +2486,6 @@
  				     uint64_t start,
  				     enum i915_cache_level level, u32 flags)
  {
@@ -6895,7 +6870,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  	struct i915_ggtt *ggtt = i915_vm_to_ggtt(vm);
  	struct sgt_iter sgt_iter;
  	gen6_pte_t __iomem *gtt_entries;
-@@ -2526,8 +2513,7 @@
+@@ -2516,8 +2513,7 @@
  	 * want to flush the TLBs only after we're certain all the PTE updates
  	 * have finished.
  	 */
@@ -6905,7 +6880,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  }
  
  static void nop_clear_range(struct i915_address_space *vm,
-@@ -2618,7 +2604,7 @@
+@@ -2608,7 +2604,7 @@
  			 enum i915_cache_level cache_level,
  			 u32 flags)
  {
@@ -6914,7 +6889,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  	struct drm_i915_gem_object *obj = vma->obj;
  	u32 pte_flags = 0;
  	int ret;
-@@ -2650,7 +2636,7 @@
+@@ -2640,7 +2636,7 @@
  				 enum i915_cache_level cache_level,
  				 u32 flags)
  {
@@ -6923,7 +6898,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  	u32 pte_flags;
  	int ret;
  
-@@ -2684,7 +2670,7 @@
+@@ -2674,7 +2670,7 @@
  
  static void ggtt_unbind_vma(struct i915_vma *vma)
  {
@@ -6932,7 +6907,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  	struct i915_hw_ppgtt *appgtt = i915->mm.aliasing_ppgtt;
  	const u64 size = min(vma->size, vma->node.size);
  
-@@ -2708,7 +2694,7 @@
+@@ -2698,7 +2694,7 @@
  	struct i915_ggtt *ggtt = &dev_priv->ggtt;
  
  	if (unlikely(ggtt->do_idle_maps)) {
@@ -6941,7 +6916,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  			DRM_ERROR("Failed to wait for idle; VT'd may hang.\n");
  			/* Wait a bit, in hopes it avoids the hang */
  			udelay(10);
-@@ -2724,13 +2710,11 @@
+@@ -2714,13 +2710,11 @@
  				  u64 *end)
  {
  	if (node->color != color)
@@ -6959,7 +6934,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  }
  
  int i915_gem_init_ggtt(struct drm_i915_private *dev_priv)
-@@ -2757,9 +2741,9 @@
+@@ -2747,9 +2741,9 @@
  	/* Reserve a mappable slot for our lockless error capture */
  	ret = drm_mm_insert_node_in_range_generic(&ggtt->base.mm,
  						  &ggtt->error_capture,
@@ -6971,7 +6946,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  	if (ret)
  		return ret;
  
-@@ -2926,8 +2910,8 @@
+@@ -2916,8 +2910,8 @@
  
  static int ggtt_probe_common(struct i915_ggtt *ggtt, u64 size)
  {
@@ -6982,7 +6957,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  	phys_addr_t phys_addr;
  	int ret;
  
-@@ -2941,7 +2925,7 @@
+@@ -2931,7 +2925,7 @@
  	 * resort to an uncached mapping. The WC issue is easily caught by the
  	 * readback check when writing GTT PTE entries.
  	 */
@@ -6991,7 +6966,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  		ggtt->gsm = ioremap_nocache(phys_addr, size);
  	else
  		ggtt->gsm = ioremap_wc(phys_addr, size);
-@@ -3039,12 +3023,12 @@
+@@ -3029,12 +3023,12 @@
  	struct i915_ggtt *ggtt = i915_vm_to_ggtt(vm);
  
  	iounmap(ggtt->gsm);
@@ -7006,7 +6981,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  	struct pci_dev *pdev = dev_priv->drm.pdev;
  	unsigned int size;
  	u16 snb_gmch_ctl;
-@@ -3071,7 +3055,7 @@
+@@ -3061,7 +3055,7 @@
  
  	ggtt->base.total = (size / sizeof(gen8_pte_t)) << PAGE_SHIFT;
  
@@ -7015,7 +6990,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  		chv_setup_private_ppat(dev_priv);
  	else
  		bdw_setup_private_ppat(dev_priv);
-@@ -3088,12 +3072,14 @@
+@@ -3078,12 +3072,14 @@
  	if (IS_CHERRYVIEW(dev_priv))
  		ggtt->base.insert_entries = gen8_ggtt_insert_entries__BKL;
  
@@ -7031,7 +7006,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  	struct pci_dev *pdev = dev_priv->drm.pdev;
  	unsigned int size;
  	u16 snb_gmch_ctl;
-@@ -3125,6 +3111,8 @@
+@@ -3115,6 +3111,8 @@
  	ggtt->base.unbind_vma = ggtt_unbind_vma;
  	ggtt->base.cleanup = gen6_gmch_remove;
  
@@ -7040,7 +7015,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  	if (HAS_EDRAM(dev_priv))
  		ggtt->base.pte_encode = iris_pte_encode;
  	else if (IS_HASWELL(dev_priv))
-@@ -3146,7 +3134,7 @@
+@@ -3136,7 +3134,7 @@
  
  static int i915_gmch_probe(struct i915_ggtt *ggtt)
  {
@@ -7049,7 +7024,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  	int ret;
  
  	ret = intel_gmch_probe(dev_priv->bridge_dev, dev_priv->drm.pdev, NULL);
-@@ -3166,6 +3154,8 @@
+@@ -3156,6 +3154,8 @@
  	ggtt->base.unbind_vma = ggtt_unbind_vma;
  	ggtt->base.cleanup = i915_gmch_remove;
  
@@ -7058,7 +7033,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  	if (unlikely(ggtt->do_idle_maps))
  		DRM_INFO("applying Ironlake quirks for intel_iommu\n");
  
-@@ -3181,7 +3171,7 @@
+@@ -3171,7 +3171,7 @@
  	struct i915_ggtt *ggtt = &dev_priv->ggtt;
  	int ret;
  
@@ -7067,7 +7042,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  
  	if (INTEL_GEN(dev_priv) <= 5)
  		ret = i915_gmch_probe(ggtt);
-@@ -3274,6 +3264,17 @@
+@@ -3264,6 +3264,17 @@
  	return 0;
  }
  
@@ -7085,7 +7060,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  void i915_gem_restore_gtt_mappings(struct drm_i915_private *dev_priv)
  {
  	struct i915_ggtt *ggtt = &dev_priv->ggtt;
-@@ -3311,7 +3312,7 @@
+@@ -3301,7 +3312,7 @@
  	ggtt->base.closed = false;
  
  	if (INTEL_GEN(dev_priv) >= 8) {
@@ -7094,7 +7069,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  			chv_setup_private_ppat(dev_priv);
  		else
  			bdw_setup_private_ppat(dev_priv);
-@@ -3337,52 +3338,7 @@
+@@ -3327,52 +3338,7 @@
  		}
  	}
  
@@ -7148,7 +7123,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  }
  
  static struct scatterlist *
-@@ -3482,7 +3438,7 @@
+@@ -3472,7 +3438,7 @@
  {
  	struct sg_table *st;
  	struct scatterlist *sg, *iter;
@@ -7157,7 +7132,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  	unsigned int offset;
  	int ret = -ENOMEM;
  
-@@ -3494,9 +3450,7 @@
+@@ -3484,9 +3450,7 @@
  	if (ret)
  		goto err_sg_alloc;
  
@@ -7168,7 +7143,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  	GEM_BUG_ON(!iter);
  
  	sg = st->sgl;
-@@ -3548,7 +3502,8 @@
+@@ -3538,7 +3502,8 @@
  		vma->pages = vma->obj->mm.pages;
  	else if (vma->ggtt_view.type == I915_GGTT_VIEW_ROTATED)
  		vma->pages =
@@ -7178,7 +7153,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
  	else if (vma->ggtt_view.type == I915_GGTT_VIEW_PARTIAL)
  		vma->pages = intel_partial_pages(&vma->ggtt_view, vma->obj);
  	else
-@@ -3569,3 +3524,205 @@
+@@ -3559,3 +3524,205 @@
  	return ret;
  }
  
@@ -7386,7 +7361,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.c b/drivers/gpu/drm
 +}
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.h b/drivers/gpu/drm/i915/i915_gem_gtt.h
 --- a/drivers/gpu/drm/i915/i915_gem_gtt.h	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/i915_gem_gtt.h	2017-07-26 21:44:29.143864254 +0900
++++ b/drivers/gpu/drm/i915/i915_gem_gtt.h	2017-08-29 00:13:32.368928763 +0900
 @@ -40,6 +40,9 @@
  #include "i915_gem_timeline.h"
  #include "i915_gem_request.h"
@@ -7552,8 +7527,8 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_gtt.h b/drivers/gpu/drm
  
  #endif
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_internal.c b/drivers/gpu/drm/i915/i915_gem_internal.c
---- a/drivers/gpu/drm/i915/i915_gem_internal.c	2017-07-23 23:04:42.191923886 +0900
-+++ b/drivers/gpu/drm/i915/i915_gem_internal.c	2017-07-21 14:19:02.000000000 +0900
+--- a/drivers/gpu/drm/i915/i915_gem_internal.c	2017-08-29 00:06:10.710508492 +0900
++++ b/drivers/gpu/drm/i915/i915_gem_internal.c	2017-08-29 00:13:32.372928749 +0900
 @@ -67,7 +67,7 @@
  #endif
  
@@ -7585,7 +7560,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_internal.c b/drivers/gp
  
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_object.h b/drivers/gpu/drm/i915/i915_gem_object.h
 --- a/drivers/gpu/drm/i915/i915_gem_object.h	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/i915_gem_object.h	2017-07-25 03:11:46.435568283 +0900
++++ b/drivers/gpu/drm/i915/i915_gem_object.h	2017-08-29 00:13:32.380928721 +0900
 @@ -54,6 +54,9 @@
  	struct sg_table *(*get_pages)(struct drm_i915_gem_object *);
  	void (*put_pages)(struct drm_i915_gem_object *, struct sg_table *);
@@ -7628,7 +7603,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_object.h b/drivers/gpu/
  {
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_render_state.c b/drivers/gpu/drm/i915/i915_gem_render_state.c
 --- a/drivers/gpu/drm/i915/i915_gem_render_state.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/i915_gem_render_state.c	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/i915_gem_render_state.c	2017-08-29 00:13:32.388928693 +0900
 @@ -60,7 +60,7 @@
   * this is sufficient as the null state generator makes the final batch
   * with two passes to build command and state separately. At this point
@@ -7663,8 +7638,8 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_render_state.c b/driver
  		ret = PTR_ERR(so->vma);
  		goto err_obj;
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_request.c b/drivers/gpu/drm/i915/i915_gem_request.c
---- a/drivers/gpu/drm/i915/i915_gem_request.c	2017-07-23 23:04:42.203923485 +0900
-+++ b/drivers/gpu/drm/i915/i915_gem_request.c	2017-07-27 07:42:43.998628244 +0900
+--- a/drivers/gpu/drm/i915/i915_gem_request.c	2017-08-29 00:06:10.722508447 +0900
++++ b/drivers/gpu/drm/i915/i915_gem_request.c	2017-08-29 00:13:32.400928651 +0900
 @@ -24,6 +24,8 @@
  
  #include <linux/prefetch.h>
@@ -7923,7 +7898,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_request.c b/drivers/gpu
  	 * should already have been reserved in the ring buffer. Let the ring
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_request.h b/drivers/gpu/drm/i915/i915_gem_request.h
 --- a/drivers/gpu/drm/i915/i915_gem_request.h	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/i915_gem_request.h	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/i915_gem_request.h	2017-08-29 00:13:32.408928622 +0900
 @@ -170,17 +170,6 @@
  	/** Preallocate space in the ring for the emitting the request */
  	u32 reserved_space;
@@ -7943,8 +7918,8 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_request.h b/drivers/gpu
  	 * error state dump only).
  	 */
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_shrinker.c b/drivers/gpu/drm/i915/i915_gem_shrinker.c
---- a/drivers/gpu/drm/i915/i915_gem_shrinker.c	2017-07-23 23:04:42.215923085 +0900
-+++ b/drivers/gpu/drm/i915/i915_gem_shrinker.c	2017-07-21 14:19:02.000000000 +0900
+--- a/drivers/gpu/drm/i915/i915_gem_shrinker.c	2017-08-29 00:06:10.742508373 +0900
++++ b/drivers/gpu/drm/i915/i915_gem_shrinker.c	2017-08-29 00:13:32.412928608 +0900
 @@ -53,6 +53,14 @@
  	BUG();
  }
@@ -8014,8 +7989,8 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_shrinker.c b/drivers/gp
  
  static int
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_stolen.c b/drivers/gpu/drm/i915/i915_gem_stolen.c
---- a/drivers/gpu/drm/i915/i915_gem_stolen.c	2017-07-23 23:04:42.227922685 +0900
-+++ b/drivers/gpu/drm/i915/i915_gem_stolen.c	2017-07-27 07:54:06.631800945 +0900
+--- a/drivers/gpu/drm/i915/i915_gem_stolen.c	2017-08-29 00:06:10.754508329 +0900
++++ b/drivers/gpu/drm/i915/i915_gem_stolen.c	2017-08-29 00:13:32.424928565 +0900
 @@ -54,12 +54,6 @@
  	if (!drm_mm_initialized(&dev_priv->mm.stolen))
  		return -ENODEV;
@@ -8340,7 +8315,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_stolen.c b/drivers/gpu/
  	__i915_vma_set_map_and_fenceable(vma);
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_tiling.c b/drivers/gpu/drm/i915/i915_gem_tiling.c
 --- a/drivers/gpu/drm/i915/i915_gem_tiling.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/i915_gem_tiling.c	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/i915_gem_tiling.c	2017-08-29 00:13:32.432928538 +0900
 @@ -34,8 +34,8 @@
  /**
   * DOC: buffer object tiling
@@ -8815,7 +8790,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_tiling.c b/drivers/gpu/
  	struct drm_i915_private *dev_priv = to_i915(dev);
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_timeline.c b/drivers/gpu/drm/i915/i915_gem_timeline.c
 --- a/drivers/gpu/drm/i915/i915_gem_timeline.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/i915_gem_timeline.c	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/i915_gem_timeline.c	2017-08-29 00:13:32.444928496 +0900
 @@ -81,10 +81,18 @@
  					&class, "&global_timeline->lock");
  }
@@ -8841,7 +8816,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_timeline.c b/drivers/gp
  }
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_timeline.h b/drivers/gpu/drm/i915/i915_gem_timeline.h
 --- a/drivers/gpu/drm/i915/i915_gem_timeline.h	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/i915_gem_timeline.h	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/i915_gem_timeline.h	2017-08-29 00:13:32.452928467 +0900
 @@ -56,7 +56,7 @@
  
  struct i915_gem_timeline {
@@ -8853,7 +8828,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_timeline.h b/drivers/gp
  	const char *name;
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_userptr.c b/drivers/gpu/drm/i915/i915_gem_userptr.c
 --- a/drivers/gpu/drm/i915/i915_gem_userptr.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/i915_gem_userptr.c	2017-07-27 08:05:17.516893528 +0900
++++ b/drivers/gpu/drm/i915/i915_gem_userptr.c	2017-08-29 00:13:32.464928425 +0900
 @@ -507,7 +507,7 @@
  			flags |= FOLL_WRITE;
  
@@ -8874,7 +8849,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gem_userptr.c b/drivers/gpu
  
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gpu_error.c b/drivers/gpu/drm/i915/i915_gpu_error.c
 --- a/drivers/gpu/drm/i915/i915_gpu_error.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/i915_gpu_error.c	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/i915_gpu_error.c	2017-08-29 00:13:32.480928369 +0900
 @@ -121,6 +121,7 @@
  	e->pos += len;
  }
@@ -9181,7 +9156,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_gpu_error.c b/drivers/gpu/d
  	spin_lock_irq(&dev_priv->gpu_error.lock);
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_guc_reg.h b/drivers/gpu/drm/i915/i915_guc_reg.h
 --- a/drivers/gpu/drm/i915/i915_guc_reg.h	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/i915_guc_reg.h	2017-07-25 00:23:14.905056871 +0900
++++ b/drivers/gpu/drm/i915/i915_guc_reg.h	2017-08-29 00:13:32.488928340 +0900
 @@ -100,8 +100,8 @@
  				 GUC_ENABLE_READ_CACHE_FOR_WOPCM_DATA	| \
  				 GUC_ENABLE_MIA_CLOCK_GATING)
@@ -9195,7 +9170,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_guc_reg.h b/drivers/gpu/drm
  #define   GEN8_DRB_VALID		  (1<<0)
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_guc_submission.c b/drivers/gpu/drm/i915/i915_guc_submission.c
 --- a/drivers/gpu/drm/i915/i915_guc_submission.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/i915_guc_submission.c	2017-07-27 22:17:11.520760237 +0900
++++ b/drivers/gpu/drm/i915/i915_guc_submission.c	2017-08-29 00:13:32.496928312 +0900
 @@ -98,7 +98,7 @@
  
  	POSTING_READ(SOFT_SCRATCH(i - 1));
@@ -9679,8 +9654,8 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_guc_submission.c b/drivers/
  {
  	guc_read_update_log_buffer(&dev_priv->guc);
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_irq.c b/drivers/gpu/drm/i915/i915_irq.c
---- a/drivers/gpu/drm/i915/i915_irq.c	2017-07-23 23:04:42.243922152 +0900
-+++ b/drivers/gpu/drm/i915/i915_irq.c	2017-07-27 06:44:16.541409179 +0900
+--- a/drivers/gpu/drm/i915/i915_irq.c	2017-08-29 00:06:10.766508284 +0900
++++ b/drivers/gpu/drm/i915/i915_irq.c	2017-08-29 00:13:32.516928242 +0900
 @@ -1153,6 +1153,9 @@
  			adj *= 2;
  		else /* CHV needs even encode values */
@@ -9866,7 +9841,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_irq.c b/drivers/gpu/drm/i91
  			dev_priv->display.hpd_irq_setup = spt_hpd_irq_setup;
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_params.c b/drivers/gpu/drm/i915/i915_params.c
 --- a/drivers/gpu/drm/i915/i915_params.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/i915_params.c	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/i915_params.c	2017-08-29 00:13:32.552928115 +0900
 @@ -50,7 +50,7 @@
  	.error_capture = true,
  	.invert_brightness = 0,
@@ -9890,7 +9865,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_params.c b/drivers/gpu/drm/
  MODULE_PARM_DESC(use_mmio_flip,
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_params.h b/drivers/gpu/drm/i915/i915_params.h
 --- a/drivers/gpu/drm/i915/i915_params.h	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/i915_params.h	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/i915_params.h	2017-08-29 00:13:32.556928101 +0900
 @@ -44,7 +44,6 @@
  	int disable_power_well;
  	int enable_ips;
@@ -9908,8 +9883,8 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_params.h b/drivers/gpu/drm/
  	bool fastboot;
  	bool prefault_disable;
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_pci.c b/drivers/gpu/drm/i915/i915_pci.c
---- a/drivers/gpu/drm/i915/i915_pci.c	2017-07-23 23:04:42.263921485 +0900
-+++ b/drivers/gpu/drm/i915/i915_pci.c	2017-07-25 08:39:46.450611672 +0900
+--- a/drivers/gpu/drm/i915/i915_pci.c	2017-08-29 00:06:10.962507559 +0900
++++ b/drivers/gpu/drm/i915/i915_pci.c	2017-08-29 00:13:32.568928058 +0900
 @@ -54,28 +54,32 @@
  #define CHV_COLORS \
  	.color = { .degamma_lut_size = 65, .gamma_lut_size = 257 }
@@ -10323,7 +10298,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_pci.c b/drivers/gpu/drm/i91
  	INTEL_I915G_IDS(&intel_i915g_info),
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_pvinfo.h b/drivers/gpu/drm/i915/i915_pvinfo.h
 --- a/drivers/gpu/drm/i915/i915_pvinfo.h	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/i915_pvinfo.h	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/i915_pvinfo.h	2017-08-29 00:13:32.576928031 +0900
 @@ -36,10 +36,6 @@
  #define VGT_VERSION_MAJOR 1
  #define VGT_VERSION_MINOR 0
@@ -10348,7 +10323,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_pvinfo.h b/drivers/gpu/drm/
  	/*
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_reg.h b/drivers/gpu/drm/i915/i915_reg.h
 --- a/drivers/gpu/drm/i915/i915_reg.h	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/i915_reg.h	2017-07-24 23:53:36.578332744 +0900
++++ b/drivers/gpu/drm/i915/i915_reg.h	2017-08-29 00:13:32.600927946 +0900
 @@ -62,6 +62,9 @@
  #define _PORT3(port, a, b, c) ((port) == PORT_A ? (a) : \
  			       (port) == PORT_B ? (b) : (c))
@@ -10999,7 +10974,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_reg.h b/drivers/gpu/drm/i91
  #define _MIPIC_DATA_ADDRESS		(dev_priv->mipi_mmio_base + 0xb908)
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_suspend.c b/drivers/gpu/drm/i915/i915_suspend.c
 --- a/drivers/gpu/drm/i915/i915_suspend.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/i915_suspend.c	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/i915_suspend.c	2017-08-29 00:13:32.648927777 +0900
 @@ -56,13 +56,12 @@
  	i915_redisable_vga(dev_priv);
  }
@@ -11052,7 +11027,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_suspend.c b/drivers/gpu/drm
  }
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_sw_fence.c b/drivers/gpu/drm/i915/i915_sw_fence.c
 --- a/drivers/gpu/drm/i915/i915_sw_fence.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/i915_sw_fence.c	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/i915_sw_fence.c	2017-08-29 00:13:32.652927763 +0900
 @@ -17,6 +17,93 @@
  
  static DEFINE_SPINLOCK(i915_sw_fence_lock);
@@ -11319,7 +11294,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_sw_fence.c b/drivers/gpu/dr
  		unsigned int count, i;
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_sw_fence.h b/drivers/gpu/drm/i915/i915_sw_fence.h
 --- a/drivers/gpu/drm/i915/i915_sw_fence.h	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/i915_sw_fence.h	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/i915_sw_fence.h	2017-08-29 00:13:32.660927735 +0900
 @@ -56,6 +56,12 @@
  	__i915_sw_fence_init((fence), (fn), NULL, NULL)
  #endif
@@ -11335,7 +11310,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_sw_fence.h b/drivers/gpu/dr
  int i915_sw_fence_await_sw_fence(struct i915_sw_fence *fence,
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_sysfs.c b/drivers/gpu/drm/i915/i915_sysfs.c
 --- a/drivers/gpu/drm/i915/i915_sysfs.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/i915_sysfs.c	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/i915_sysfs.c	2017-08-29 00:13:32.668927707 +0900
 @@ -58,7 +58,7 @@
  
  		if (I915_READ(VLV_COUNTER_CONTROL) & VLV_COUNT_RANGE_HIGH)
@@ -11365,7 +11340,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_sysfs.c b/drivers/gpu/drm/i
  }
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_trace.h b/drivers/gpu/drm/i915/i915_trace.h
 --- a/drivers/gpu/drm/i915/i915_trace.h	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/i915_trace.h	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/i915_trace.h	2017-08-29 00:13:32.676927679 +0900
 @@ -406,7 +406,7 @@
  			    ),
  
@@ -11429,7 +11404,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_trace.h b/drivers/gpu/drm/i
  	TP_printk("dev=%u, vm=%p", __entry->dev, __entry->vm)
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_utils.h b/drivers/gpu/drm/i915/i915_utils.h
 --- a/drivers/gpu/drm/i915/i915_utils.h	1970-01-01 09:00:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/i915_utils.h	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/i915_utils.h	2017-08-29 00:13:32.676927679 +0900
 @@ -0,0 +1,64 @@
 +/*
 + * Copyright © 2016 Intel Corporation
@@ -11497,7 +11472,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_utils.h b/drivers/gpu/drm/i
 +#endif /* !__I915_UTILS_H */
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_vgpu.c b/drivers/gpu/drm/i915/i915_vgpu.c
 --- a/drivers/gpu/drm/i915/i915_vgpu.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/i915_vgpu.c	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/i915_vgpu.c	2017-08-29 00:13:32.684927650 +0900
 @@ -60,8 +60,8 @@
   */
  void i915_check_vgpu(struct drm_i915_private *dev_priv)
@@ -11600,7 +11575,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_vgpu.c b/drivers/gpu/drm/i9
  			goto err;
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_vma.c b/drivers/gpu/drm/i915/i915_vma.c
 --- a/drivers/gpu/drm/i915/i915_vma.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/i915_vma.c	2017-07-27 08:15:18.174170688 +0900
++++ b/drivers/gpu/drm/i915/i915_vma.c	2017-08-29 00:13:32.696927608 +0900
 @@ -45,6 +45,7 @@
  	if (i915_vma_is_active(vma))
  		return;
@@ -12124,7 +12099,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_vma.c b/drivers/gpu/drm/i91
  	if (unlikely(i915_vma_is_closed(vma)))
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_vma.h b/drivers/gpu/drm/i915/i915_vma.h
 --- a/drivers/gpu/drm/i915/i915_vma.h	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/i915_vma.h	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/i915_vma.h	2017-08-29 00:13:32.704927580 +0900
 @@ -55,6 +55,9 @@
  	u64 size;
  	u64 display_alignment;
@@ -12248,7 +12223,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/i915_vma.h b/drivers/gpu/drm/i91
  		vma->fence->pin_count--;
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_atomic.c b/drivers/gpu/drm/i915/intel_atomic.c
 --- a/drivers/gpu/drm/i915/intel_atomic.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/intel_atomic.c	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/intel_atomic.c	2017-08-29 00:13:32.712927551 +0900
 @@ -265,37 +265,6 @@
  	return 0;
  }
@@ -12289,7 +12264,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_atomic.c b/drivers/gpu/drm
  {
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_atomic_plane.c b/drivers/gpu/drm/i915/intel_atomic_plane.c
 --- a/drivers/gpu/drm/i915/intel_atomic_plane.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/intel_atomic_plane.c	2017-07-25 20:16:07.662559180 +0900
++++ b/drivers/gpu/drm/i915/intel_atomic_plane.c	2017-08-29 00:13:32.720927523 +0900
 @@ -123,36 +123,24 @@
  	drm_atomic_helper_plane_destroy_state(plane, state);
  }
@@ -12366,7 +12341,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_atomic_plane.c b/drivers/g
  {
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_bios.c b/drivers/gpu/drm/i915/intel_bios.c
 --- a/drivers/gpu/drm/i915/intel_bios.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/intel_bios.c	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/intel_bios.c	2017-08-29 00:13:32.732927481 +0900
 @@ -114,16 +114,18 @@
  	panel_fixed_mode->hsync_start = panel_fixed_mode->hdisplay +
  		((dvo_timing->hsync_off_hi << 8) | dvo_timing->hsync_off_lo);
@@ -12552,7 +12527,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_bios.c b/drivers/gpu/drm/i
  	for (i = 0; i < dev_priv->vbt.child_dev_num; i++) {
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_breadcrumbs.c b/drivers/gpu/drm/i915/intel_breadcrumbs.c
 --- a/drivers/gpu/drm/i915/intel_breadcrumbs.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/intel_breadcrumbs.c	2017-07-27 20:54:54.836437766 +0900
++++ b/drivers/gpu/drm/i915/intel_breadcrumbs.c	2017-08-29 00:13:32.744927439 +0900
 @@ -154,7 +154,7 @@
  
  static inline struct intel_wait *to_wait(struct rb_node *node)
@@ -12586,7 +12561,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_breadcrumbs.c b/drivers/gp
  
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_crt.c b/drivers/gpu/drm/i915/intel_crt.c
 --- a/drivers/gpu/drm/i915/intel_crt.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/intel_crt.c	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/intel_crt.c	2017-08-29 00:13:32.752927410 +0900
 @@ -837,12 +837,11 @@
  	.destroy = intel_encoder_destroy,
  };
@@ -12616,7 +12591,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_crt.c b/drivers/gpu/drm/i9
  	intel_connector_attach_encoder(intel_connector, &crt->base);
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_csr.c b/drivers/gpu/drm/i915/intel_csr.c
 --- a/drivers/gpu/drm/i915/intel_csr.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/intel_csr.c	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/intel_csr.c	2017-08-29 00:13:32.760927382 +0900
 @@ -34,6 +34,9 @@
   * low-power state and comes back to normal.
   */
@@ -12669,7 +12644,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_csr.c b/drivers/gpu/drm/i9
  		csr->fw_path = I915_CSR_SKL;
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_ddi.c b/drivers/gpu/drm/i915/intel_ddi.c
 --- a/drivers/gpu/drm/i915/intel_ddi.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/intel_ddi.c	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/intel_ddi.c	2017-08-29 00:13:32.772927340 +0900
 @@ -442,7 +442,7 @@
  
  	hdmi_level = dev_priv->vbt.ddi_port_info[port].hdmi_level_shift;
@@ -12896,7 +12871,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_ddi.c b/drivers/gpu/drm/i9
  			intel_dig_port->saved_port_bits |= DDI_A_4_LANES;
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_device_info.c b/drivers/gpu/drm/i915/intel_device_info.c
 --- a/drivers/gpu/drm/i915/intel_device_info.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/intel_device_info.c	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/intel_device_info.c	2017-08-29 00:13:32.788927283 +0900
 @@ -24,11 +24,51 @@
  
  #include "i915_drv.h"
@@ -12985,8 +12960,8 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_device_info.c b/drivers/gp
  		info->num_sprites[PIPE_B] = 2;
  		info->num_sprites[PIPE_C] = 1;
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_display.c b/drivers/gpu/drm/i915/intel_display.c
---- a/drivers/gpu/drm/i915/intel_display.c	2017-07-23 23:04:42.295920418 +0900
-+++ b/drivers/gpu/drm/i915/intel_display.c	2017-07-27 22:39:37.544959959 +0900
+--- a/drivers/gpu/drm/i915/intel_display.c	2017-08-29 00:06:11.002507411 +0900
++++ b/drivers/gpu/drm/i915/intel_display.c	2017-08-29 00:13:32.816927185 +0900
 @@ -115,15 +115,15 @@
  			    const struct intel_crtc_state *pipe_config);
  static void intel_begin_crtc_commit(struct drm_crtc *, struct drm_crtc_state *);
@@ -14823,8 +14798,8 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_display.c b/drivers/gpu/dr
  
  void intel_connector_attach_encoder(struct intel_connector *connector,
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_dp.c b/drivers/gpu/drm/i915/intel_dp.c
---- a/drivers/gpu/drm/i915/intel_dp.c	2017-07-23 23:04:42.339918950 +0900
-+++ b/drivers/gpu/drm/i915/intel_dp.c	2017-07-27 23:03:33.077885196 +0900
+--- a/drivers/gpu/drm/i915/intel_dp.c	2017-08-29 00:06:11.082507115 +0900
++++ b/drivers/gpu/drm/i915/intel_dp.c	2017-08-29 00:13:33.264925610 +0900
 @@ -156,38 +156,28 @@
  	u8 source_max, sink_max;
  
@@ -15567,7 +15542,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_dp.c b/drivers/gpu/drm/i91
  	intel_encoder->compute_config = intel_dp_compute_config;
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_dp_mst.c b/drivers/gpu/drm/i915/intel_dp_mst.c
 --- a/drivers/gpu/drm/i915/intel_dp_mst.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/intel_dp_mst.c	2017-07-27 22:53:50.139923052 +0900
++++ b/drivers/gpu/drm/i915/intel_dp_mst.c	2017-08-29 00:13:33.284925540 +0900
 @@ -37,6 +37,8 @@
  	struct intel_dp_mst_encoder *intel_mst = enc_to_mst(&encoder->base);
  	struct intel_digital_port *intel_dig_port = intel_mst->primary;
@@ -15655,7 +15630,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_dp_mst.c b/drivers/gpu/drm
  	return MODE_OK;
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_dpio_phy.c b/drivers/gpu/drm/i915/intel_dpio_phy.c
 --- a/drivers/gpu/drm/i915/intel_dpio_phy.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/intel_dpio_phy.c	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/intel_dpio_phy.c	2017-08-29 00:13:33.300925483 +0900
 @@ -131,6 +131,18 @@
  	enum dpio_phy rcomp_phy;
  
@@ -15927,7 +15902,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_dpio_phy.c b/drivers/gpu/d
  	for (lane = 0; lane < 4; lane++) {
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_dpll_mgr.c b/drivers/gpu/drm/i915/intel_dpll_mgr.c
 --- a/drivers/gpu/drm/i915/intel_dpll_mgr.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/intel_dpll_mgr.c	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/intel_dpll_mgr.c	2017-08-29 00:13:33.316925427 +0900
 @@ -23,6 +23,25 @@
  
  #include "intel_drv.h"
@@ -16627,7 +16602,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_dpll_mgr.c b/drivers/gpu/d
 +}
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_dpll_mgr.h b/drivers/gpu/drm/i915/intel_dpll_mgr.h
 --- a/drivers/gpu/drm/i915/intel_dpll_mgr.h	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/intel_dpll_mgr.h	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/intel_dpll_mgr.h	2017-08-29 00:13:33.320925412 +0900
 @@ -40,32 +40,72 @@
  struct intel_shared_dpll;
  struct intel_dpll_mgr;
@@ -16877,8 +16852,8 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_dpll_mgr.h b/drivers/gpu/d
  bool bxt_ddi_dp_set_dpll_hw_state(int clock,
  			  struct intel_dpll_hw_state *dpll_hw_state);
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_drv.h b/drivers/gpu/drm/i915/intel_drv.h
---- a/drivers/gpu/drm/i915/intel_drv.h	2017-07-23 23:04:42.875901083 +0900
-+++ b/drivers/gpu/drm/i915/intel_drv.h	2017-07-25 03:17:38.816411820 +0900
+--- a/drivers/gpu/drm/i915/intel_drv.h	2017-08-29 00:06:11.118506982 +0900
++++ b/drivers/gpu/drm/i915/intel_drv.h	2017-08-29 00:13:33.336925356 +0900
 @@ -32,6 +32,7 @@
  #include "i915_drv.h"
  #include <drm/drm_crtc.h>
@@ -17209,7 +17184,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_drv.h b/drivers/gpu/drm/i9
  #endif /* __INTEL_DRV_H__ */
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_dsi.c b/drivers/gpu/drm/i915/intel_dsi.c
 --- a/drivers/gpu/drm/i915/intel_dsi.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/intel_dsi.c	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/intel_dsi.c	2017-08-29 00:13:33.348925314 +0900
 @@ -340,7 +340,7 @@
  	/* DSI uses short packets for sync events, so clear mode flags for DSI */
  	adjusted_mode->flags = 0;
@@ -17402,7 +17377,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_dsi.c b/drivers/gpu/drm/i9
  		intel_encoder->crtc_mask = BIT(PIPE_A);
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_dsi_panel_vbt.c b/drivers/gpu/drm/i915/intel_dsi_panel_vbt.c
 --- a/drivers/gpu/drm/i915/intel_dsi_panel_vbt.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/intel_dsi_panel_vbt.c	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/intel_dsi_panel_vbt.c	2017-08-29 00:13:33.356925285 +0900
 @@ -29,6 +29,7 @@
  #include <drm/drm_edid.h>
  #include <drm/i915_drm.h>
@@ -17476,7 +17451,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_dsi_panel_vbt.c b/drivers/
  }
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_dsi_pll.c b/drivers/gpu/drm/i915/intel_dsi_pll.c
 --- a/drivers/gpu/drm/i915/intel_dsi_pll.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/intel_dsi_pll.c	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/intel_dsi_pll.c	2017-08-29 00:13:33.360925271 +0900
 @@ -156,8 +156,10 @@
  	vlv_cck_write(dev_priv, CCK_REG_DSI_PLL_CONTROL,
  		      config->dsi_pll.ctrl & ~DSI_PLL_VCO_EN);
@@ -17546,7 +17521,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_dsi_pll.c b/drivers/gpu/dr
  		vlv_dsi_reset_clocks(encoder, port);
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_dvo.c b/drivers/gpu/drm/i915/intel_dvo.c
 --- a/drivers/gpu/drm/i915/intel_dvo.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/intel_dvo.c	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/intel_dvo.c	2017-08-29 00:13:33.372925229 +0900
 @@ -422,9 +422,8 @@
  		return PORT_C;
  }
@@ -17586,7 +17561,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_dvo.c b/drivers/gpu/drm/i9
  			encoder_type = DRM_MODE_ENCODER_LVDS;
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_engine_cs.c b/drivers/gpu/drm/i915/intel_engine_cs.c
 --- a/drivers/gpu/drm/i915/intel_engine_cs.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/intel_engine_cs.c	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/intel_engine_cs.c	2017-08-29 00:13:33.376925215 +0900
 @@ -105,19 +105,20 @@
  	/* Nothing to do here, execute in order of dependencies */
  	engine->schedule = NULL;
@@ -17673,7 +17648,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_engine_cs.c b/drivers/gpu/
  u64 intel_engine_get_active_head(struct intel_engine_cs *engine)
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_fbc.c b/drivers/gpu/drm/i915/intel_fbc.c
 --- a/drivers/gpu/drm/i915/intel_fbc.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/intel_fbc.c	2017-07-27 22:33:35.660414120 +0900
++++ b/drivers/gpu/drm/i915/intel_fbc.c	2017-08-29 00:13:33.384925187 +0900
 @@ -82,20 +82,10 @@
  static void intel_fbc_get_plane_source_size(struct intel_fbc_state_cache *cache,
  					    int *width, int *height)
@@ -17737,8 +17712,8 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_fbc.c b/drivers/gpu/drm/i9
  
  	return 0;
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_fbdev.c b/drivers/gpu/drm/i915/intel_fbdev.c
---- a/drivers/gpu/drm/i915/intel_fbdev.c	2017-07-23 23:04:43.059894945 +0900
-+++ b/drivers/gpu/drm/i915/intel_fbdev.c	2017-07-27 22:46:15.494112515 +0900
+--- a/drivers/gpu/drm/i915/intel_fbdev.c	2017-08-29 00:06:11.130506938 +0900
++++ b/drivers/gpu/drm/i915/intel_fbdev.c	2017-08-29 00:13:33.392925158 +0900
 @@ -145,9 +145,9 @@
  	 * important and we should probably use that space with FBC or other
  	 * features. */
@@ -17753,7 +17728,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_fbdev.c b/drivers/gpu/drm/
  		ret = PTR_ERR(obj);
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_guc.h b/drivers/gpu/drm/i915/intel_guc.h
 --- a/drivers/gpu/drm/i915/intel_guc.h	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/intel_guc.h	2017-07-25 03:41:13.106324997 +0900
++++ b/drivers/gpu/drm/i915/intel_guc.h	2017-08-29 00:13:33.404925116 +0900
 @@ -170,12 +170,12 @@
  };
  
@@ -17773,8 +17748,8 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_guc.h b/drivers/gpu/drm/i9
  /* i915_guc_submission.c */
  int i915_guc_submission_init(struct drm_i915_private *dev_priv);
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_guc_loader.c b/drivers/gpu/drm/i915/intel_guc_loader.c
---- a/drivers/gpu/drm/i915/intel_guc_loader.c	2017-07-23 23:04:43.151891876 +0900
-+++ b/drivers/gpu/drm/i915/intel_guc_loader.c	2017-07-27 21:20:15.722261636 +0900
+--- a/drivers/gpu/drm/i915/intel_guc_loader.c	2017-08-29 00:06:11.146506879 +0900
++++ b/drivers/gpu/drm/i915/intel_guc_loader.c	2017-08-29 00:13:33.416925074 +0900
 @@ -446,9 +446,8 @@
   *
   * Return:	non-zero code on error
@@ -17824,7 +17799,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_guc_loader.c b/drivers/gpu
  	guc_interrupts_release(dev_priv);
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_gvt.c b/drivers/gpu/drm/i915/intel_gvt.c
 --- a/drivers/gpu/drm/i915/intel_gvt.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/intel_gvt.c	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/intel_gvt.c	2017-08-29 00:13:33.420925060 +0900
 @@ -67,11 +67,21 @@
  		return 0;
  	}
@@ -17849,7 +17824,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_gvt.c b/drivers/gpu/drm/i9
  	 */
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_hangcheck.c b/drivers/gpu/drm/i915/intel_hangcheck.c
 --- a/drivers/gpu/drm/i915/intel_hangcheck.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/intel_hangcheck.c	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/intel_hangcheck.c	2017-08-29 00:13:33.432925017 +0900
 @@ -236,13 +236,13 @@
  		memset(&engine->hangcheck.instdone, 0,
  		       sizeof(engine->hangcheck.instdone));
@@ -18178,8 +18153,8 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_hangcheck.c b/drivers/gpu/
  	/* Reset timer in case GPU hangs without another request being added */
  	if (busy_count)
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_hdmi.c b/drivers/gpu/drm/i915/intel_hdmi.c
---- a/drivers/gpu/drm/i915/intel_hdmi.c	2017-07-23 23:04:43.243888807 +0900
-+++ b/drivers/gpu/drm/i915/intel_hdmi.c	2017-07-27 23:27:43.784544903 +0900
+--- a/drivers/gpu/drm/i915/intel_hdmi.c	2017-08-29 00:06:11.162506819 +0900
++++ b/drivers/gpu/drm/i915/intel_hdmi.c	2017-08-29 00:13:33.444924975 +0900
 @@ -133,6 +133,7 @@
  }
  
@@ -18747,8 +18722,8 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_hdmi.c b/drivers/gpu/drm/i
  	intel_encoder->compute_config = intel_hdmi_compute_config;
  	if (HAS_PCH_SPLIT(dev_priv)) {
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_hotplug.c b/drivers/gpu/drm/i915/intel_hotplug.c
---- a/drivers/gpu/drm/i915/intel_hotplug.c	2017-07-23 23:04:43.391883870 +0900
-+++ b/drivers/gpu/drm/i915/intel_hotplug.c	2017-07-21 14:19:02.000000000 +0900
+--- a/drivers/gpu/drm/i915/intel_hotplug.c	2017-08-29 00:06:11.178506760 +0900
++++ b/drivers/gpu/drm/i915/intel_hotplug.c	2017-08-29 00:13:33.452924947 +0900
 @@ -180,7 +180,7 @@
  
  	/* Enable polling and queue hotplug re-enabling. */
@@ -18769,7 +18744,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_hotplug.c b/drivers/gpu/dr
  
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_i2c.c b/drivers/gpu/drm/i915/intel_i2c.c
 --- a/drivers/gpu/drm/i915/intel_i2c.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/intel_i2c.c	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/intel_i2c.c	2017-08-29 00:13:33.460924918 +0900
 @@ -72,7 +72,7 @@
  static const struct gmbus_pin *get_gmbus_pin(struct drm_i915_private *dev_priv,
  					     unsigned int pin)
@@ -18853,8 +18828,8 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_i2c.c b/drivers/gpu/drm/i9
  	unsigned int pin;
  
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_lrc.c b/drivers/gpu/drm/i915/intel_lrc.c
---- a/drivers/gpu/drm/i915/intel_lrc.c	2017-07-23 23:04:43.395883737 +0900
-+++ b/drivers/gpu/drm/i915/intel_lrc.c	2017-07-27 21:07:04.584778013 +0900
+--- a/drivers/gpu/drm/i915/intel_lrc.c	2017-08-29 00:06:11.194506701 +0900
++++ b/drivers/gpu/drm/i915/intel_lrc.c	2017-08-29 00:13:33.472924876 +0900
 @@ -230,8 +230,6 @@
  
  static int execlists_context_deferred_alloc(struct i915_gem_context *ctx,
@@ -19401,7 +19376,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_lrc.c b/drivers/gpu/drm/i9
  		goto error_deref_obj;
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_lrc.h b/drivers/gpu/drm/i915/intel_lrc.h
 --- a/drivers/gpu/drm/i915/intel_lrc.h	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/intel_lrc.h	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/intel_lrc.h	2017-08-29 00:13:33.480924848 +0900
 @@ -26,7 +26,7 @@
  
  #include "intel_ringbuffer.h"
@@ -19443,8 +19418,8 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_lrc.h b/drivers/gpu/drm/i9
  void intel_lr_context_resume(struct drm_i915_private *dev_priv);
  uint64_t intel_lr_context_descriptor(struct i915_gem_context *ctx,
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_lspcon.c b/drivers/gpu/drm/i915/intel_lspcon.c
---- a/drivers/gpu/drm/i915/intel_lspcon.c	2017-07-23 23:04:43.427882669 +0900
-+++ b/drivers/gpu/drm/i915/intel_lspcon.c	2017-07-21 14:19:02.000000000 +0900
+--- a/drivers/gpu/drm/i915/intel_lspcon.c	2017-08-29 00:06:11.210506642 +0900
++++ b/drivers/gpu/drm/i915/intel_lspcon.c	2017-08-29 00:13:33.504924763 +0900
 @@ -35,21 +35,59 @@
  	return &dig_port->dp;
  }
@@ -19595,7 +19570,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_lspcon.c b/drivers/gpu/drm
  		}
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_lvds.c b/drivers/gpu/drm/i915/intel_lvds.c
 --- a/drivers/gpu/drm/i915/intel_lvds.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/intel_lvds.c	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/intel_lvds.c	2017-08-29 00:13:33.512924735 +0900
 @@ -460,13 +460,13 @@
  static enum drm_connector_status
  intel_lvds_detect(struct drm_connector *connector, bool force)
@@ -19626,7 +19601,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_lvds.c b/drivers/gpu/drm/i
  	struct intel_lvds_connector *lvds_connector;
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_mocs.c b/drivers/gpu/drm/i915/intel_mocs.c
 --- a/drivers/gpu/drm/i915/intel_mocs.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/intel_mocs.c	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/intel_mocs.c	2017-08-29 00:13:33.524924693 +0900
 @@ -182,7 +182,7 @@
  		table->size  = ARRAY_SIZE(skylake_mocs_table);
  		table->table = skylake_mocs_table;
@@ -19658,7 +19633,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_mocs.c b/drivers/gpu/drm/i
  
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_mocs.h b/drivers/gpu/drm/i915/intel_mocs.h
 --- a/drivers/gpu/drm/i915/intel_mocs.h	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/intel_mocs.h	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/intel_mocs.h	2017-08-29 00:13:33.528924679 +0900
 @@ -53,7 +53,7 @@
  #include "i915_drv.h"
  
@@ -19670,7 +19645,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_mocs.h b/drivers/gpu/drm/i
  #endif
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_overlay.c b/drivers/gpu/drm/i915/intel_overlay.c
 --- a/drivers/gpu/drm/i915/intel_overlay.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/intel_overlay.c	2017-07-25 20:13:26.434649629 +0900
++++ b/drivers/gpu/drm/i915/intel_overlay.c	2017-08-29 00:13:33.536924650 +0900
 @@ -187,6 +187,29 @@
  	struct i915_gem_active last_flip;
  };
@@ -20142,7 +20117,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_overlay.c b/drivers/gpu/dr
  	overlay->reg_bo = reg_bo;
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_panel.c b/drivers/gpu/drm/i915/intel_panel.c
 --- a/drivers/gpu/drm/i915/intel_panel.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/intel_panel.c	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/intel_panel.c	2017-08-29 00:13:33.548924608 +0900
 @@ -48,7 +48,7 @@
  
  /**
@@ -20237,7 +20212,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_panel.c b/drivers/gpu/drm/
  		panel->backlight.disable = bxt_disable_backlight;
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_pipe_crc.c b/drivers/gpu/drm/i915/intel_pipe_crc.c
 --- a/drivers/gpu/drm/i915/intel_pipe_crc.c	1970-01-01 09:00:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/intel_pipe_crc.c	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/intel_pipe_crc.c	2017-08-29 00:13:33.556924580 +0900
 @@ -0,0 +1,1011 @@
 +/*
 + * Copyright © 2013 Intel Corporation
@@ -21251,8 +21226,8 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_pipe_crc.c b/drivers/gpu/d
 +	return ret;
 +}
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_pm.c b/drivers/gpu/drm/i915/intel_pm.c
---- a/drivers/gpu/drm/i915/intel_pm.c	2017-07-23 23:04:43.459881602 +0900
-+++ b/drivers/gpu/drm/i915/intel_pm.c	2017-07-26 02:49:02.638788577 +0900
+--- a/drivers/gpu/drm/i915/intel_pm.c	2017-08-29 00:06:11.254506480 +0900
++++ b/drivers/gpu/drm/i915/intel_pm.c	2017-08-29 00:13:33.568924537 +0900
 @@ -312,23 +312,30 @@
  #define FW_WM(value, plane) \
  	(((value) << DSPFW_ ## plane ## _SHIFT) & DSPFW_ ## plane ## _MASK)
@@ -22778,7 +22753,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_pm.c b/drivers/gpu/drm/i91
  
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_psr.c b/drivers/gpu/drm/i915/intel_psr.c
 --- a/drivers/gpu/drm/i915/intel_psr.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/intel_psr.c	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/intel_psr.c	2017-08-29 00:13:33.604924410 +0900
 @@ -122,13 +122,26 @@
  static void skl_psr_setup_su_vsc(struct intel_dp *intel_dp)
  {
@@ -23107,7 +23082,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_psr.c b/drivers/gpu/drm/i9
  
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_ringbuffer.c b/drivers/gpu/drm/i915/intel_ringbuffer.c
 --- a/drivers/gpu/drm/i915/intel_ringbuffer.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/intel_ringbuffer.c	2017-07-27 21:07:27.801050046 +0900
++++ b/drivers/gpu/drm/i915/intel_ringbuffer.c	2017-08-29 00:13:33.612924382 +0900
 @@ -599,10 +599,62 @@
  static void reset_ring_common(struct intel_engine_cs *engine,
  			      struct drm_i915_gem_request *request)
@@ -23434,7 +23409,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_ringbuffer.c b/drivers/gpu
  	} else if (HAS_BROKEN_CS_TLB(dev_priv)) {
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_ringbuffer.h b/drivers/gpu/drm/i915/intel_ringbuffer.h
 --- a/drivers/gpu/drm/i915/intel_ringbuffer.h	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/intel_ringbuffer.h	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/intel_ringbuffer.h	2017-08-29 00:13:33.636924297 +0900
 @@ -65,14 +65,37 @@
  	 GEN8_SEMAPHORE_OFFSET(from, (__ring)->id))
  
@@ -23572,7 +23547,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_ringbuffer.h b/drivers/gpu
  int __intel_ring_space(int head, int tail, int size);
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_runtime_pm.c b/drivers/gpu/drm/i915/intel_runtime_pm.c
 --- a/drivers/gpu/drm/i915/intel_runtime_pm.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/intel_runtime_pm.c	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/intel_runtime_pm.c	2017-08-29 00:13:33.664924199 +0900
 @@ -453,6 +453,57 @@
  	BIT(POWER_DOMAIN_AUX_C) |			\
  	BIT(POWER_DOMAIN_INIT))
@@ -23818,7 +23793,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_runtime_pm.c b/drivers/gpu
  
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_sdvo.c b/drivers/gpu/drm/i915/intel_sdvo.c
 --- a/drivers/gpu/drm/i915/intel_sdvo.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/intel_sdvo.c	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/intel_sdvo.c	2017-08-29 00:13:33.676924156 +0900
 @@ -1296,7 +1296,7 @@
  	if (INTEL_GEN(dev_priv) >= 4) {
  		/* done in crtc_mode_set as the dpll_md reg must be written early */
@@ -23888,7 +23863,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_sdvo.c b/drivers/gpu/drm/i
  	/* Read the regs to test if we can talk to the device */
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_sprite.c b/drivers/gpu/drm/i915/intel_sprite.c
 --- a/drivers/gpu/drm/i915/intel_sprite.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/intel_sprite.c	2017-07-25 20:15:14.434568781 +0900
++++ b/drivers/gpu/drm/i915/intel_sprite.c	2017-08-29 00:13:33.692924100 +0900
 @@ -81,10 +81,13 @@
   */
  void intel_pipe_update_start(struct intel_crtc *crtc)
@@ -24150,7 +24125,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_sprite.c b/drivers/gpu/drm
  
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_tv.c b/drivers/gpu/drm/i915/intel_tv.c
 --- a/drivers/gpu/drm/i915/intel_tv.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/intel_tv.c	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/intel_tv.c	2017-08-29 00:13:33.716924016 +0900
 @@ -1537,9 +1537,9 @@
  };
  
@@ -24164,8 +24139,8 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_tv.c b/drivers/gpu/drm/i91
  	struct intel_tv *intel_tv;
  	struct intel_encoder *intel_encoder;
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_uncore.c b/drivers/gpu/drm/i915/intel_uncore.c
---- a/drivers/gpu/drm/i915/intel_uncore.c	2017-07-23 23:04:43.491880534 +0900
-+++ b/drivers/gpu/drm/i915/intel_uncore.c	2017-07-21 14:19:02.000000000 +0900
+--- a/drivers/gpu/drm/i915/intel_uncore.c	2017-08-29 00:06:11.294506332 +0900
++++ b/drivers/gpu/drm/i915/intel_uncore.c	2017-08-29 00:13:33.728923973 +0900
 @@ -423,8 +423,7 @@
  				   GT_FIFO_CTL_RC6_POLICY_STALL);
  	}
@@ -24203,7 +24178,7 @@ diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_uncore.c b/drivers/gpu/drm
  		return i915_do_reset;
 diff --exclude .git -ruN a/drivers/gpu/drm/i915/intel_vbt_defs.h b/drivers/gpu/drm/i915/intel_vbt_defs.h
 --- a/drivers/gpu/drm/i915/intel_vbt_defs.h	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/intel_vbt_defs.h	2017-07-21 14:19:02.000000000 +0900
++++ b/drivers/gpu/drm/i915/intel_vbt_defs.h	2017-08-29 00:13:33.732923959 +0900
 @@ -399,10 +399,12 @@
  	u8 vblank_hi:4;
  	u8 vactive_hi:4;
