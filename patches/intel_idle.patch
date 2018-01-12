@@ -20,7 +20,7 @@
  		drv->state_count += 1;
  	}
  
-+	printk(PREFIX "BYT C6 auto-demotion-disable: %d\n", icpu->byt_auto_demotion_disable_flag);
++	pr_debug("BYT C6 auto-demotion-disable: %d\n", icpu->byt_auto_demotion_disable_flag);
 +
  	if (icpu->byt_auto_demotion_disable_flag) {
  		wrmsrl(MSR_CC6_DEMOTION_POLICY_CONFIG, 0);

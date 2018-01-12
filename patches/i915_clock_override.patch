@@ -1,7 +1,7 @@
 diff -ru a/drivers/gpu/drm/i915/i915_params.c b/drivers/gpu/drm/i915/i915_params.c
---- a/drivers/gpu/drm/i915/i915_params.c	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/i915_params.c	2017-07-22 22:08:26.116980654 +0900
-@@ -63,6 +63,10 @@
+--- a/drivers/gpu/drm/i915/i915_params.c	2017-09-04 05:56:17.000000000 +0900
++++ b/drivers/gpu/drm/i915/i915_params.c	2018-01-13 00:39:39.873310259 +0900
+@@ -65,6 +65,10 @@
  	.inject_load_failure = 0,
  	.enable_dpcd_backlight = false,
  	.enable_gvt = false,
@@ -12,7 +12,7 @@ diff -ru a/drivers/gpu/drm/i915/i915_params.c b/drivers/gpu/drm/i915/i915_params
  };
  
  module_param_named(modeset, i915.modeset, int, 0400);
-@@ -243,3 +247,16 @@
+@@ -253,3 +257,16 @@
  module_param_named(enable_gvt, i915.enable_gvt, bool, 0400);
  MODULE_PARM_DESC(enable_gvt,
  	"Enable support for Intel GVT-g graphics virtualization host support(default:false)");
@@ -30,25 +30,27 @@ diff -ru a/drivers/gpu/drm/i915/i915_params.c b/drivers/gpu/drm/i915/i915_params
 +MODULE_PARM_DESC(guard_clock_force,
 +	"Set GPU guard clock force (-1=default)");
 diff -ru a/drivers/gpu/drm/i915/i915_params.h b/drivers/gpu/drm/i915/i915_params.h
---- a/drivers/gpu/drm/i915/i915_params.h	2017-02-20 07:34:00.000000000 +0900
-+++ b/drivers/gpu/drm/i915/i915_params.h	2017-07-22 22:08:26.120980524 +0900
-@@ -66,6 +66,10 @@
- 	bool enable_dp_mst;
- 	bool enable_dpcd_backlight;
- 	bool enable_gvt;
-+	int min_clock_force;
-+	int max_clock_force;
-+	int eff_clock_force;
-+	int guar_clock_force;
- };
+--- a/drivers/gpu/drm/i915/i915_params.h	2017-09-04 05:56:17.000000000 +0900
++++ b/drivers/gpu/drm/i915/i915_params.h	2018-01-13 00:41:50.321324495 +0900
+@@ -67,7 +67,11 @@
+ 	func(bool, nuclear_pageflip); \
+ 	func(bool, enable_dp_mst); \
+ 	func(bool, enable_dpcd_backlight); \
+-	func(bool, enable_gvt)
++	func(bool, enable_gvt); \
++	func(int, min_clock_force); \
++	func(int, max_clock_force); \
++	func(int, eff_clock_force); \
++	func(int, guar_clock_force)
  
- extern struct i915_params i915 __read_mostly;
+ #define MEMBER(T, member) T member
+ struct i915_params {
 diff -ru a/drivers/gpu/drm/i915/intel_pm.c b/drivers/gpu/drm/i915/intel_pm.c
---- a/drivers/gpu/drm/i915/intel_pm.c	2017-07-22 21:32:34.000000000 +0900
-+++ b/drivers/gpu/drm/i915/intel_pm.c	2017-07-22 22:11:39.446695175 +0900
-@@ -5263,15 +5263,39 @@
+--- a/drivers/gpu/drm/i915/intel_pm.c	2018-01-12 23:43:15.000000000 +0900
++++ b/drivers/gpu/drm/i915/intel_pm.c	2018-01-13 00:46:57.668972034 +0900
+@@ -6342,15 +6342,39 @@
  	/* static values from HW: RP0 > RP1 > RPn (min_freq) */
- 	if (IS_BROXTON(dev_priv)) {
+ 	if (IS_GEN9_LP(dev_priv)) {
  		u32 rp_state_cap = I915_READ(BXT_RP_STATE_CAP);
 -		dev_priv->rps.rp0_freq = (rp_state_cap >> 16) & 0xff;
 -		dev_priv->rps.rp1_freq = (rp_state_cap >>  8) & 0xff;
@@ -93,7 +95,7 @@ diff -ru a/drivers/gpu/drm/i915/intel_pm.c b/drivers/gpu/drm/i915/intel_pm.c
  	/* hw_max = RP0 until we check for overclocking */
  	dev_priv->rps.max_freq = dev_priv->rps.rp0_freq;
  
-@@ -5898,23 +5922,39 @@
+@@ -6964,23 +6988,39 @@
  	}
  	DRM_DEBUG_DRIVER("DDR speed: %d MHz\n", dev_priv->mem_freq);
  
@@ -137,7 +139,7 @@ diff -ru a/drivers/gpu/drm/i915/intel_pm.c b/drivers/gpu/drm/i915/intel_pm.c
  	DRM_DEBUG_DRIVER("min GPU freq: %d MHz (%u)\n",
  			 intel_gpu_freq(dev_priv, dev_priv->rps.min_freq),
  			 dev_priv->rps.min_freq);
-@@ -5942,24 +5982,40 @@
+@@ -7008,23 +7048,39 @@
  	}
  	DRM_DEBUG_DRIVER("DDR speed: %d MHz\n", dev_priv->mem_freq);
  
@@ -172,13 +174,12 @@ diff -ru a/drivers/gpu/drm/i915/intel_pm.c b/drivers/gpu/drm/i915/intel_pm.c
  			 intel_gpu_freq(dev_priv, dev_priv->rps.rp1_freq),
  			 dev_priv->rps.rp1_freq);
  
- 	/* PUnit validated range is only [RPe, RP0] */
--	dev_priv->rps.min_freq = dev_priv->rps.efficient_freq;
+-	dev_priv->rps.min_freq = cherryview_rps_min_freq(dev_priv);
 +	if (i915.min_clock_force > 0)
 +		dev_priv->rps.min_freq =
 +			intel_freq_opcode(dev_priv, i915.min_clock_force);
 +	else
-+		dev_priv->rps.min_freq = dev_priv->rps.efficient_freq;
++		dev_priv->rps.min_freq = cherryview_rps_min_freq(dev_priv);
  	DRM_DEBUG_DRIVER("min GPU freq: %d MHz (%u)\n",
  			 intel_gpu_freq(dev_priv, dev_priv->rps.min_freq),
  			 dev_priv->rps.min_freq);
