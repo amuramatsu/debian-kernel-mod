@@ -1,0 +1,21 @@
+--- a/drivers/staging/rtl8723bs/core/rtw_recv.c
++++ b/drivers/staging/rtl8723bs/core/rtw_recv.c
+@@ -2506,6 +2506,7 @@
+ 		DBG_COUNTER(padapter->rx_logs.core_rx_post_indicate_err);
+ 		goto _recv_data_drop;
+ 	}
++	return ret;
+ 
+ _recv_data_drop:
+ 	precvpriv->rx_drop++;
+--- a/drivers/staging/rtl8723bs/hal/sdio_ops.c
++++ b/drivers/staging/rtl8723bs/hal/sdio_ops.c
+@@ -988,7 +988,7 @@
+ 	precvpriv = &padapter->recvpriv;
+ 	precvbuf = rtw_dequeue_recvbuf(&precvpriv->free_recv_buf_queue);
+ 	if (precvbuf == NULL) {
+-		DBG_871X_LEVEL(_drv_err_, "%s: alloc recvbuf FAIL!\n", __func__);
++		//DBG_871X_LEVEL(_drv_err_, "%s: alloc recvbuf FAIL!\n", __func__);
+ 		return NULL;
+ 	}
+ 
