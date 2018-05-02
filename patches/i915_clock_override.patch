@@ -1,185 +1,161 @@
 diff -ru a/drivers/gpu/drm/i915/i915_params.c b/drivers/gpu/drm/i915/i915_params.c
---- a/drivers/gpu/drm/i915/i915_params.c	2017-09-04 05:56:17.000000000 +0900
-+++ b/drivers/gpu/drm/i915/i915_params.c	2018-01-13 00:39:39.873310259 +0900
-@@ -65,6 +65,10 @@
- 	.inject_load_failure = 0,
- 	.enable_dpcd_backlight = false,
- 	.enable_gvt = false,
-+	.min_clock_force = 200,
-+	.max_clock_force = -1,
-+	.eff_clock_force = 200,
-+	.guar_clock_force = 200,
- };
+--- a/drivers/gpu/drm/i915/i915_params.c	2018-01-29 06:20:33.000000000 +0900
++++ b/drivers/gpu/drm/i915/i915_params.c	2018-05-03 15:22:06.680610985 +0900
+@@ -190,3 +190,12 @@
  
- module_param_named(modeset, i915.modeset, int, 0400);
-@@ -253,3 +257,16 @@
- module_param_named(enable_gvt, i915.enable_gvt, bool, 0400);
- MODULE_PARM_DESC(enable_gvt,
+ i915_param_named(enable_gvt, bool, 0400,
  	"Enable support for Intel GVT-g graphics virtualization host support(default:false)");
 +
-+module_param_named(min_clock_force, i915.min_clock_force, int, 0400);
-+MODULE_PARM_DESC(min_clock_force,
++i915_param_named(min_clock_force, int, 0400,
 +	"Set GPU minimum clock force (-1=default)");
-+module_param_named(max_clock_force, i915.max_clock_force, int, 0400);
-+MODULE_PARM_DESC(max_clock_force,
++i915_param_named(max_clock_force, int, 0400,
 +	"Set GPU maximum clock force (-1=default)");
-+module_param_named(eff_clock_force, i915.eff_clock_force, int, 0400);
-+MODULE_PARM_DESC(eff_clock_force,
++i915_param_named(eff_clock_force, int, 0400,
 +	"Set GPU efficient clock force (-1=default)");
-+module_param_named(guard_clock_force, i915.guar_clock_force, int, 0400);
-+MODULE_PARM_DESC(guard_clock_force,
++i915_param_named(guard_clock_force, int, 0400,
 +	"Set GPU guard clock force (-1=default)");
 diff -ru a/drivers/gpu/drm/i915/i915_params.h b/drivers/gpu/drm/i915/i915_params.h
---- a/drivers/gpu/drm/i915/i915_params.h	2017-09-04 05:56:17.000000000 +0900
-+++ b/drivers/gpu/drm/i915/i915_params.h	2018-01-13 00:41:50.321324495 +0900
+--- a/drivers/gpu/drm/i915/i915_params.h	2018-01-29 06:20:33.000000000 +0900
++++ b/drivers/gpu/drm/i915/i915_params.h	2018-05-03 15:23:47.868594557 +0900
 @@ -67,7 +67,11 @@
- 	func(bool, nuclear_pageflip); \
- 	func(bool, enable_dp_mst); \
- 	func(bool, enable_dpcd_backlight); \
--	func(bool, enable_gvt)
-+	func(bool, enable_gvt); \
-+	func(int, min_clock_force); \
-+	func(int, max_clock_force); \
-+	func(int, eff_clock_force); \
-+	func(int, guar_clock_force)
+ 	param(bool, nuclear_pageflip, false) \
+ 	param(bool, enable_dp_mst, true) \
+ 	param(bool, enable_dpcd_backlight, false) \
+-	param(bool, enable_gvt, false)
++	param(bool, enable_gvt, false)	\
++	param(int, min_clock_force, -1)	\
++	param(int, max_clock_force, -1)	\
++	param(int, eff_clock_force, -1)	\
++	param(int, guard_clock_force, -1)
  
- #define MEMBER(T, member) T member
+ #define MEMBER(T, member, ...) T member;
  struct i915_params {
 diff -ru a/drivers/gpu/drm/i915/intel_pm.c b/drivers/gpu/drm/i915/intel_pm.c
---- a/drivers/gpu/drm/i915/intel_pm.c	2018-01-12 23:43:15.000000000 +0900
-+++ b/drivers/gpu/drm/i915/intel_pm.c	2018-01-13 00:46:57.668972034 +0900
-@@ -6342,15 +6342,39 @@
+--- a/drivers/gpu/drm/i915/intel_pm.c	2018-01-29 06:20:33.000000000 +0900
++++ b/drivers/gpu/drm/i915/intel_pm.c	2018-05-03 15:46:59.976260347 +0900
+@@ -6521,15 +6521,39 @@
  	/* static values from HW: RP0 > RP1 > RPn (min_freq) */
  	if (IS_GEN9_LP(dev_priv)) {
  		u32 rp_state_cap = I915_READ(BXT_RP_STATE_CAP);
--		dev_priv->rps.rp0_freq = (rp_state_cap >> 16) & 0xff;
--		dev_priv->rps.rp1_freq = (rp_state_cap >>  8) & 0xff;
--		dev_priv->rps.min_freq = (rp_state_cap >>  0) & 0xff;
-+		if (i915.max_clock_force > 0)
-+			dev_priv->rps.rp0_freq = i915.max_clock_force / 50;
+-		rps->rp0_freq = (rp_state_cap >> 16) & 0xff;
+-		rps->rp1_freq = (rp_state_cap >>  8) & 0xff;
+-		rps->min_freq = (rp_state_cap >>  0) & 0xff;
++		if (i915_modparams.max_clock_force > 0)
++			rps->rp0_freq = i915_modparams.max_clock_force / 50;
 +		else
-+			dev_priv->rps.rp0_freq = (rp_state_cap >> 16) & 0xff;
-+		if (i915.eff_clock_force > 0)
-+			dev_priv->rps.rp1_freq = i915.eff_clock_force / 50;
++			rps->rp0_freq = (rp_state_cap >> 16) & 0xff;
++		if (i915_modparams.eff_clock_force > 0)
++			rps->rp1_freq = i915_modparams.eff_clock_force / 50;
 +		else
-+			dev_priv->rps.rp1_freq = (rp_state_cap >>  8) & 0xff;
-+		if (i915.min_clock_force > 0)
-+			dev_priv->rps.min_freq = i915.min_clock_force / 50;
++			rps->rp1_freq = (rp_state_cap >>  8) & 0xff;
++		if (i915_modparams.min_clock_force > 0)
++			rps->min_freq = i915_modparams.min_clock_force / 50;
 +		else
-+			dev_priv->rps.min_freq = (rp_state_cap >>  0) & 0xff;
++			rps->min_freq = (rp_state_cap >>  0) & 0xff;
  	} else {
  		u32 rp_state_cap = I915_READ(GEN6_RP_STATE_CAP);
--		dev_priv->rps.rp0_freq = (rp_state_cap >>  0) & 0xff;
--		dev_priv->rps.rp1_freq = (rp_state_cap >>  8) & 0xff;
--		dev_priv->rps.min_freq = (rp_state_cap >> 16) & 0xff;
+-		rps->rp0_freq = (rp_state_cap >>  0) & 0xff;
+-		rps->rp1_freq = (rp_state_cap >>  8) & 0xff;
+-		rps->min_freq = (rp_state_cap >> 16) & 0xff;
 -	}
-+		if (i915.max_clock_force > 0)
-+			dev_priv->rps.rp0_freq = i915.max_clock_force / 50;
++		if (i915_modparams.max_clock_force > 0)
++			rps->rp0_freq = i915_modparams.max_clock_force / 50;
 +		else
-+			dev_priv->rps.rp0_freq = (rp_state_cap >>  0) & 0xff;
-+		if (i915.eff_clock_force > 0)
-+			dev_priv->rps.rp1_freq = i915.eff_clock_force / 50;
++			rps->rp0_freq = (rp_state_cap >>  0) & 0xff;
++		if (i915_modparams.eff_clock_force > 0)
++			rps->rp1_freq = i915_modparams.eff_clock_force / 50;
 +		else
-+			dev_priv->rps.rp1_freq = (rp_state_cap >>  8) & 0xff;
-+		if (i915.min_clock_force > 0)
-+			dev_priv->rps.min_freq = i915.min_clock_force / 50;
++			rps->rp1_freq = (rp_state_cap >>  8) & 0xff;
++		if (i915_modparams.min_clock_force > 0)
++			rps->min_freq = i915_modparams.min_clock_force / 50;
 +		else
-+			dev_priv->rps.min_freq = (rp_state_cap >> 16) & 0xff;
++			rps->min_freq = (rp_state_cap >> 16) & 0xff;
 +	}
-+	if (dev_priv->rps.min_freq > dev_priv->rps.rp0_freq)
-+		dev_priv->rps.min_freq = dev_priv->rps.rp0_freq;
-+	if (dev_priv->rps.rp1_freq > dev_priv->rps.rp0_freq)
-+		dev_priv->rps.rp1_freq = dev_priv->rps.rp0_freq;
-+	if (dev_priv->rps.rp1_freq < dev_priv->rps.min_freq)
-+		dev_priv->rps.rp1_freq = dev_priv->rps.min_freq;
++	if (rps->min_freq > rps->rp0_freq)
++		rps->min_freq = rps->rp0_freq;
++	if (rps->rp1_freq > rps->rp0_freq)
++		rps->rp1_freq = rps->rp0_freq;
++	if (rps->rp1_freq < rps->min_freq)
++		rps->rp1_freq = rps->min_freq;
  	/* hw_max = RP0 until we check for overclocking */
- 	dev_priv->rps.max_freq = dev_priv->rps.rp0_freq;
+ 	rps->max_freq = rps->rp0_freq;
  
-@@ -6964,23 +6988,39 @@
+@@ -7158,22 +7182,35 @@
  	}
  	DRM_DEBUG_DRIVER("DDR speed: %d MHz\n", dev_priv->mem_freq);
  
--	dev_priv->rps.max_freq = valleyview_rps_max_freq(dev_priv);
-+	if (i915.max_clock_force > 0)
-+		dev_priv->rps.max_freq =
-+			intel_freq_opcode(dev_priv, i915.max_clock_force);
+-	rps->max_freq = valleyview_rps_max_freq(dev_priv);
++	if (i915_modparams.max_clock_force > 0)
++		rps->max_freq = intel_freq_opcode(dev_priv, i915_modparams.max_clock_force);
 +	else
-+		dev_priv->rps.max_freq = valleyview_rps_max_freq(dev_priv);
- 	dev_priv->rps.rp0_freq = dev_priv->rps.max_freq;
++		rps->max_freq = valleyview_rps_max_freq(dev_priv);
+ 	rps->rp0_freq = rps->max_freq;
  	DRM_DEBUG_DRIVER("max GPU freq: %d MHz (%u)\n",
- 			 intel_gpu_freq(dev_priv, dev_priv->rps.max_freq),
- 			 dev_priv->rps.max_freq);
+ 			 intel_gpu_freq(dev_priv, rps->max_freq),
+ 			 rps->max_freq);
  
--	dev_priv->rps.efficient_freq = valleyview_rps_rpe_freq(dev_priv);
-+	if (i915.eff_clock_force > 0)
-+		dev_priv->rps.efficient_freq =
-+			intel_freq_opcode(dev_priv, i915.eff_clock_force);
+-	rps->efficient_freq = valleyview_rps_rpe_freq(dev_priv);
++	if (i915_modparams.eff_clock_force > 0)
++		rps->efficient_freq = intel_freq_opcode(dev_priv, i915_modparams.eff_clock_force);
 +	else
-+		dev_priv->rps.efficient_freq = valleyview_rps_rpe_freq(dev_priv);
++		rps->efficient_freq = valleyview_rps_rpe_freq(dev_priv);
  	DRM_DEBUG_DRIVER("RPe GPU freq: %d MHz (%u)\n",
- 			 intel_gpu_freq(dev_priv, dev_priv->rps.efficient_freq),
- 			 dev_priv->rps.efficient_freq);
+ 			 intel_gpu_freq(dev_priv, rps->efficient_freq),
+ 			 rps->efficient_freq);
  
--	dev_priv->rps.rp1_freq = valleyview_rps_guar_freq(dev_priv);
-+	if (i915.guar_clock_force > 0)
-+		dev_priv->rps.rp1_freq =
-+			intel_freq_opcode(dev_priv, i915.guar_clock_force);
+-	rps->rp1_freq = valleyview_rps_guar_freq(dev_priv);
++	if (i915_modparams.guard_clock_force > 0)
++		rps->rp1_freq =	intel_freq_opcode(dev_priv, i915_modparams.guard_clock_force);
 +	else
-+		dev_priv->rps.rp1_freq = valleyview_rps_guar_freq(dev_priv);
++		rps->rp1_freq = valleyview_rps_guar_freq(dev_priv);
  	DRM_DEBUG_DRIVER("RP1(Guar Freq) GPU freq: %d MHz (%u)\n",
- 			 intel_gpu_freq(dev_priv, dev_priv->rps.rp1_freq),
- 			 dev_priv->rps.rp1_freq);
+ 			 intel_gpu_freq(dev_priv, rps->rp1_freq),
+ 			 rps->rp1_freq);
  
--	dev_priv->rps.min_freq = valleyview_rps_min_freq(dev_priv);
-+	if (i915.min_clock_force > 0)
-+		dev_priv->rps.min_freq =
-+			intel_freq_opcode(dev_priv, i915.min_clock_force);
++	if (i915_modparams.min_clock_force > 0)
++		rps->min_freq = intel_freq_opcode(dev_priv, i915_modparams.min_clock_force);
 +	else
-+		dev_priv->rps.min_freq = valleyview_rps_min_freq(dev_priv);
++		rps->min_freq = valleyview_rps_min_freq(dev_priv);
+ 	rps->min_freq = valleyview_rps_min_freq(dev_priv);
  	DRM_DEBUG_DRIVER("min GPU freq: %d MHz (%u)\n",
- 			 intel_gpu_freq(dev_priv, dev_priv->rps.min_freq),
- 			 dev_priv->rps.min_freq);
-@@ -7008,23 +7048,39 @@
+ 			 intel_gpu_freq(dev_priv, rps->min_freq),
+@@ -7203,23 +7240,35 @@
  	}
  	DRM_DEBUG_DRIVER("DDR speed: %d MHz\n", dev_priv->mem_freq);
  
--	dev_priv->rps.max_freq = cherryview_rps_max_freq(dev_priv);
-+	if (i915.max_clock_force > 0)
-+		dev_priv->rps.max_freq =
-+			intel_freq_opcode(dev_priv, i915.max_clock_force);
+-	rps->max_freq = cherryview_rps_max_freq(dev_priv);
++	if (i915_modparams.max_clock_force > 0)
++		rps->max_freq = intel_freq_opcode(dev_priv, i915_modparams.max_clock_force);
 +	else
-+		dev_priv->rps.max_freq = cherryview_rps_max_freq(dev_priv);
- 	dev_priv->rps.rp0_freq = dev_priv->rps.max_freq;
++		rps->max_freq = cherryview_rps_max_freq(dev_priv);
+ 	rps->rp0_freq = rps->max_freq;
  	DRM_DEBUG_DRIVER("max GPU freq: %d MHz (%u)\n",
- 			 intel_gpu_freq(dev_priv, dev_priv->rps.max_freq),
- 			 dev_priv->rps.max_freq);
+ 			 intel_gpu_freq(dev_priv, rps->max_freq),
+ 			 rps->max_freq);
  
--	dev_priv->rps.efficient_freq = cherryview_rps_rpe_freq(dev_priv);
-+	if (i915.eff_clock_force > 0)
-+		dev_priv->rps.efficient_freq =
-+			intel_freq_opcode(dev_priv, i915.eff_clock_force);
+-	rps->efficient_freq = cherryview_rps_rpe_freq(dev_priv);
++	if (i915_modparams.eff_clock_force > 0)
++		rps->efficient_freq = intel_freq_opcode(dev_priv, i915_modparams.eff_clock_force);
 +	else
-+		dev_priv->rps.efficient_freq = cherryview_rps_rpe_freq(dev_priv);
++		rps->efficient_freq = cherryview_rps_rpe_freq(dev_priv);
  	DRM_DEBUG_DRIVER("RPe GPU freq: %d MHz (%u)\n",
- 			 intel_gpu_freq(dev_priv, dev_priv->rps.efficient_freq),
- 			 dev_priv->rps.efficient_freq);
+ 			 intel_gpu_freq(dev_priv, rps->efficient_freq),
+ 			 rps->efficient_freq);
  
--	dev_priv->rps.rp1_freq = cherryview_rps_guar_freq(dev_priv);
-+	if (i915.guar_clock_force > 0)
-+		dev_priv->rps.rp1_freq =
-+			intel_freq_opcode(dev_priv, i915.guar_clock_force);
+-	rps->rp1_freq = cherryview_rps_guar_freq(dev_priv);
++	if (i915_modparams.guard_clock_force > 0)
++		rps->rp1_freq = intel_freq_opcode(dev_priv, i915_modparams.guard_clock_force);
 +	else
-+		dev_priv->rps.rp1_freq = cherryview_rps_guar_freq(dev_priv);
++		rps->rp1_freq = cherryview_rps_guar_freq(dev_priv);
  	DRM_DEBUG_DRIVER("RP1(Guar) GPU freq: %d MHz (%u)\n",
- 			 intel_gpu_freq(dev_priv, dev_priv->rps.rp1_freq),
- 			 dev_priv->rps.rp1_freq);
+ 			 intel_gpu_freq(dev_priv, rps->rp1_freq),
+ 			 rps->rp1_freq);
  
--	dev_priv->rps.min_freq = cherryview_rps_min_freq(dev_priv);
-+	if (i915.min_clock_force > 0)
-+		dev_priv->rps.min_freq =
-+			intel_freq_opcode(dev_priv, i915.min_clock_force);
+-	rps->min_freq = cherryview_rps_min_freq(dev_priv);
++	if (i915_modparams.min_clock_force > 0)
++		rps->min_freq =	intel_freq_opcode(dev_priv, i915_modparams.min_clock_force);
 +	else
-+		dev_priv->rps.min_freq = cherryview_rps_min_freq(dev_priv);
++		rps->min_freq = cherryview_rps_min_freq(dev_priv);
  	DRM_DEBUG_DRIVER("min GPU freq: %d MHz (%u)\n",
- 			 intel_gpu_freq(dev_priv, dev_priv->rps.min_freq),
- 			 dev_priv->rps.min_freq);
+ 			 intel_gpu_freq(dev_priv, rps->min_freq),
+ 			 rps->min_freq);

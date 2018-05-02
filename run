@@ -1,15 +1,22 @@
 #! /bin/sh
 
+CODENAME=$(lsb_release -s -c)
 if [ -z "$1" ]; then
   KERNEL_VERSION=`uname -r`
 else
   KERNEL_VERSION="$1"
 fi
+case "$CODENAME" in
+  bionic)
+    APTNAME=linux-source-$(echo $KERNEL_VERSION | sed 's/-.*$//');;
+  *)
+    APTNAME=linux-image-${KERNEL_VERSION};;
+esac
 
 [ -d work ] && rm -rf work
 mkdir work
 cd work
-apt-get source "linux-image-${KERNEL_VERSION}"
+apt-get source "$APTNAME"
 pkgname=`awk '/Source:/{print $2}' linux*.dsc`
 if [ x"$pkgname" = x"linux-hwe-edge" ]; then
   ltsname=hwe-edge
