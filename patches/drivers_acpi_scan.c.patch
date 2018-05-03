@@ -1,0 +1,12 @@
+--- a/drivers/acpi/scan.c	2018-05-04 03:15:37.871179150 +0900
++++ b/drivers/acpi/scan.c	2018-05-04 03:24:47.699192505 +0900
+@@ -1543,6 +1543,9 @@
+ 	if (acpi_is_indirect_io_slave(device))
+ 		return true;
+ 
++	if (!strcmp(acpi_device_hid(device), "OBDA8723"))
++		return false;
++
+ 	/* Macs use device properties in lieu of _CRS resources */
+ 	if (x86_apple_machine &&
+ 	    (fwnode_property_present(&device->fwnode, "spiSclkPeriod") ||

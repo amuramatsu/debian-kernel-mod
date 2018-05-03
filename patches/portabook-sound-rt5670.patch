@@ -1,23 +1,20 @@
---- a/sound/soc/codecs/rt5670.c	2017-07-22 21:32:34.000000000 +0900
-+++ b/sound/soc/codecs/rt5670.c	2017-07-22 22:01:58.745544676 +0900
-@@ -2838,6 +2838,10 @@
+--- a/sound/soc/codecs/rt5670.c	2018-01-29 06:20:33.000000000 +0900
++++ b/sound/soc/codecs/rt5670.c	2018-05-04 03:30:17.540020550 +0900
+@@ -2924,6 +2924,17 @@
+ 						 RT5670_DEV_GPIO |
+ 						 RT5670_JD_MODE3),
+ 	},
++	{
++		.callback = rt5670_quirk_cb,
++		.ident = "Kingjim XMC10",
++		.matches = {
++			DMI_MATCH(DMI_BOARD_NAME, "Cherry Trail FFD"),
++		},
++		.driver_data = (unsigned long *)(RT5670_DMIC_EN |
++						 RT5670_DMIC1_IN2P |
++						 RT5670_DEV_GPIO |
++						 RT5670_JD_MODE1),
++	},
  	{}
  };
  
-+static bool use_braswell = true;
-+module_param(use_braswell, bool, 0644);
-+MODULE_PARM_DESC(use_braswell, "use braswell parameter");
-+
- static int rt5670_i2c_probe(struct i2c_client *i2c,
- 		    const struct i2c_device_id *id)
- {
-@@ -2857,7 +2861,8 @@
- 	if (pdata)
- 		rt5670->pdata = *pdata;
- 
--	if (dmi_check_system(dmi_platform_intel_braswell)) {
-+	if (use_braswell || dmi_check_system(dmi_platform_intel_braswell)) {
-+		dev_info(&i2c->dev, "Use Braswell params\n");
- 		rt5670->pdata.dmic_en = true;
- 		rt5670->pdata.dmic1_data_pin = RT5670_DMIC_DATA_IN2P;
- 		rt5670->pdata.dev_gpio = true;
