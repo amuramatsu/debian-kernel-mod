@@ -1,31 +1,7 @@
-diff -ru a/drivers/staging/rtl8723bs/core/rtw_mlme_ext.c b/drivers/staging/rtl8723bs/core/rtw_mlme_ext.c
---- a/drivers/staging/rtl8723bs/core/rtw_mlme_ext.c	2018-01-29 06:20:33.000000000 +0900
-+++ b/drivers/staging/rtl8723bs/core/rtw_mlme_ext.c	2018-05-04 11:36:46.624087490 +0900
-@@ -4263,7 +4263,7 @@
- 		issue_beacon(padapter, 100);
- 		issue++;
- 		do {
--			yield();
-+			cond_resched();
- 			rtw_hal_get_hwreg(padapter, HW_VAR_BCN_VALID, (u8 *)(&bxmitok));
- 			poll++;
- 		} while ((poll%10) != 0 && false == bxmitok && !padapter->bSurpriseRemoved && !padapter->bDriverStopped);
-diff -ru a/drivers/staging/rtl8723bs/core/rtw_pwrctrl.c b/drivers/staging/rtl8723bs/core/rtw_pwrctrl.c
---- a/drivers/staging/rtl8723bs/core/rtw_pwrctrl.c	2018-01-29 06:20:33.000000000 +0900
-+++ b/drivers/staging/rtl8723bs/core/rtw_pwrctrl.c	2018-05-04 11:37:48.768127703 +0900
-@@ -701,7 +701,7 @@
- 	bReady = false;
- 	start_time = jiffies;
- 
--	yield();
-+	cond_resched();
- 
- 	while (1) {
- 		down(&pwrpriv->lock);
 diff -ru a/drivers/staging/rtl8723bs/core/rtw_recv.c b/drivers/staging/rtl8723bs/core/rtw_recv.c
---- a/drivers/staging/rtl8723bs/core/rtw_recv.c	2018-01-29 06:20:33.000000000 +0900
-+++ b/drivers/staging/rtl8723bs/core/rtw_recv.c	2018-05-04 11:18:56.923565208 +0900
-@@ -2504,6 +2504,7 @@
+--- a/drivers/staging/rtl8723bs/core/rtw_recv.c	2018-08-13 05:41:04.000000000 +0900
++++ b/drivers/staging/rtl8723bs/core/rtw_recv.c	2019-02-05 21:39:22.123531832 +0900
+@@ -2496,6 +2496,7 @@
  		DBG_COUNTER(padapter->rx_logs.core_rx_post_indicate_err);
  		goto _recv_data_drop;
  	}
@@ -33,11 +9,10 @@ diff -ru a/drivers/staging/rtl8723bs/core/rtw_recv.c b/drivers/staging/rtl8723bs
  
  _recv_data_drop:
  	precvpriv->rx_drop++;
-Only in b/drivers/staging/rtl8723bs/core: rtw_recv.c.orig
 diff -ru a/drivers/staging/rtl8723bs/hal/rtl8723b_cmd.c b/drivers/staging/rtl8723bs/hal/rtl8723b_cmd.c
---- a/drivers/staging/rtl8723bs/hal/rtl8723b_cmd.c	2018-01-29 06:20:33.000000000 +0900
-+++ b/drivers/staging/rtl8723bs/hal/rtl8723b_cmd.c	2018-05-04 11:49:58.129339254 +0900
-@@ -2001,7 +2001,7 @@
+--- a/drivers/staging/rtl8723bs/hal/rtl8723b_cmd.c	2018-08-13 05:41:04.000000000 +0900
++++ b/drivers/staging/rtl8723bs/hal/rtl8723b_cmd.c	2019-02-05 21:39:22.127531952 +0900
+@@ -1993,7 +1993,7 @@
  #endif
  			DLBcnCount++;
  			do {
@@ -46,7 +21,7 @@ diff -ru a/drivers/staging/rtl8723bs/hal/rtl8723b_cmd.c b/drivers/staging/rtl872
  				/* mdelay(10); */
  				/*  check rsvd page download OK. */
  				rtw_hal_get_hwreg(padapter, HW_VAR_BCN_VALID, (u8 *)(&bcn_valid));
-@@ -2313,7 +2313,7 @@
+@@ -2305,7 +2305,7 @@
  		SetFwRsvdPagePkt_BTCoex(padapter);
  		DLBcnCount++;
  		do {
@@ -56,9 +31,9 @@ diff -ru a/drivers/staging/rtl8723bs/hal/rtl8723b_cmd.c b/drivers/staging/rtl872
  			/*  check rsvd page download OK. */
  			rtw_hal_get_hwreg(padapter, HW_VAR_BCN_VALID, &bcn_valid);
 diff -ru a/drivers/staging/rtl8723bs/hal/rtl8723b_hal_init.c b/drivers/staging/rtl8723bs/hal/rtl8723b_hal_init.c
---- a/drivers/staging/rtl8723bs/hal/rtl8723b_hal_init.c	2018-01-29 06:20:33.000000000 +0900
-+++ b/drivers/staging/rtl8723bs/hal/rtl8723b_hal_init.c	2018-05-04 11:49:18.145172846 +0900
-@@ -242,7 +242,7 @@
+--- a/drivers/staging/rtl8723bs/hal/rtl8723b_hal_init.c	2018-08-13 05:41:04.000000000 +0900
++++ b/drivers/staging/rtl8723bs/hal/rtl8723b_hal_init.c	2019-02-05 21:39:22.127531952 +0900
+@@ -234,7 +234,7 @@
  		value32 = rtw_read32(adapter, REG_MCUFWDL);
  		if (value32 & FWDL_ChkSum_rpt || adapter->bSurpriseRemoved || adapter->bDriverStopped)
  			break;
@@ -67,7 +42,7 @@ diff -ru a/drivers/staging/rtl8723bs/hal/rtl8723b_hal_init.c b/drivers/staging/r
  	} while (jiffies_to_msecs(jiffies-start) < timeout_ms || cnt < min_cnt);
  
  	if (!(value32 & FWDL_ChkSum_rpt)) {
-@@ -292,7 +292,7 @@
+@@ -284,7 +284,7 @@
  		value32 = rtw_read32(adapter, REG_MCUFWDL);
  		if (value32 & WINTINI_RDY || adapter->bSurpriseRemoved || adapter->bDriverStopped)
  			break;
@@ -77,9 +52,9 @@ diff -ru a/drivers/staging/rtl8723bs/hal/rtl8723b_hal_init.c b/drivers/staging/r
  
  	if (!(value32 & WINTINI_RDY)) {
 diff -ru a/drivers/staging/rtl8723bs/hal/rtl8723bs_xmit.c b/drivers/staging/rtl8723bs/hal/rtl8723bs_xmit.c
---- a/drivers/staging/rtl8723bs/hal/rtl8723bs_xmit.c	2018-01-29 06:20:33.000000000 +0900
-+++ b/drivers/staging/rtl8723bs/hal/rtl8723bs_xmit.c	2018-05-04 11:51:54.861753821 +0900
-@@ -399,7 +399,7 @@
+--- a/drivers/staging/rtl8723bs/hal/rtl8723bs_xmit.c	2018-08-13 05:41:04.000000000 +0900
++++ b/drivers/staging/rtl8723bs/hal/rtl8723bs_xmit.c	2019-02-05 21:39:22.131532072 +0900
+@@ -391,7 +391,7 @@
  				rtw_free_xmitframe(pxmitpriv, pframe);
  				pxmitbuf->priv_data = NULL;
  				enqueue_pending_xmitbuf(pxmitpriv, pxmitbuf);
@@ -88,7 +63,7 @@ diff -ru a/drivers/staging/rtl8723bs/hal/rtl8723bs_xmit.c b/drivers/staging/rtl8
  			} else
  				rtw_free_xmitbuf(pxmitpriv, pxmitbuf);
  			pxmitbuf = NULL;
-@@ -467,7 +467,7 @@
+@@ -459,7 +459,7 @@
  		if (padapter->registrypriv.wifi_spec)
  			msleep(1);
  		else
@@ -97,79 +72,3 @@ diff -ru a/drivers/staging/rtl8723bs/hal/rtl8723bs_xmit.c b/drivers/staging/rtl8
  		goto next;
  	}
  
-diff -ru a/drivers/staging/rtl8723bs/hal/sdio_ops.c b/drivers/staging/rtl8723bs/hal/sdio_ops.c
---- a/drivers/staging/rtl8723bs/hal/sdio_ops.c	2018-01-29 06:20:33.000000000 +0900
-+++ b/drivers/staging/rtl8723bs/hal/sdio_ops.c	2018-05-04 11:18:56.931565175 +0900
-@@ -988,7 +988,7 @@
- 	precvpriv = &padapter->recvpriv;
- 	precvbuf = rtw_dequeue_recvbuf(&precvpriv->free_recv_buf_queue);
- 	if (precvbuf == NULL) {
--		DBG_871X_LEVEL(_drv_err_, "%s: alloc recvbuf FAIL!\n", __func__);
-+		//DBG_871X_LEVEL(_drv_err_, "%s: alloc recvbuf FAIL!\n", __func__);
- 		return NULL;
- 	}
- 
-diff -ru a/drivers/staging/rtl8723bs/include/ieee80211.h b/drivers/staging/rtl8723bs/include/ieee80211.h
---- a/drivers/staging/rtl8723bs/include/ieee80211.h	2018-01-29 06:20:33.000000000 +0900
-+++ b/drivers/staging/rtl8723bs/include/ieee80211.h	2018-05-04 11:27:50.459085934 +0900
-@@ -84,10 +84,6 @@
- #define IEEE_PARAM_IEEE_802_1X				6
- #define IEEE_PARAM_WPAX_SELECT				7
- 
--#define AUTH_ALG_OPEN_SYSTEM			0x1
--#define AUTH_ALG_SHARED_KEY			0x2
--#define AUTH_ALG_LEAP				0x00000004
--
- #define IEEE_MLME_STA_DEAUTH				1
- #define IEEE_MLME_STA_DISASSOC			2
- 
-diff -ru a/drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c b/drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c
---- a/drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c	2018-01-29 06:20:33.000000000 +0900
-+++ b/drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c	2018-05-04 11:20:16.532341473 +0900
-@@ -3255,7 +3255,7 @@
- 
- 	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(dev);
- 	struct	mlme_priv *pmlmepriv = &(padapter->mlmepriv);
--	u8 ret;
-+	int ret;
- 
- 	if (padapter->bup == false) {
- 		DBG_871X("%s: net device is down.\n", __func__);
-diff -ru a/drivers/staging/rtl8723bs/os_dep/ioctl_linux.c b/drivers/staging/rtl8723bs/os_dep/ioctl_linux.c
---- a/drivers/staging/rtl8723bs/os_dep/ioctl_linux.c	2018-01-29 06:20:33.000000000 +0900
-+++ b/drivers/staging/rtl8723bs/os_dep/ioctl_linux.c	2018-05-04 11:30:32.731551495 +0900
-@@ -475,26 +475,26 @@
- 	struct adapter *padapter = (struct adapter *) rtw_netdev_priv(dev);
- 	int ret = 0;
- 
--	if ((value & AUTH_ALG_SHARED_KEY) && (value & AUTH_ALG_OPEN_SYSTEM)) {
--		DBG_871X("wpa_set_auth_algs, AUTH_ALG_SHARED_KEY and  AUTH_ALG_OPEN_SYSTEM [value:0x%x]\n", value);
-+	if ((value & WLAN_AUTH_SHARED_KEY) && (value & WLAN_AUTH_OPEN)) {
-+		DBG_871X("wpa_set_auth_algs, WLAN_AUTH_SHARED_KEY and WLAN_AUTH_OPEN [value:0x%x]\n", value);
- 		padapter->securitypriv.ndisencryptstatus = Ndis802_11Encryption1Enabled;
- 		padapter->securitypriv.ndisauthtype = Ndis802_11AuthModeAutoSwitch;
- 		padapter->securitypriv.dot11AuthAlgrthm = dot11AuthAlgrthm_Auto;
--	} else if (value & AUTH_ALG_SHARED_KEY)	{
--		DBG_871X("wpa_set_auth_algs, AUTH_ALG_SHARED_KEY  [value:0x%x]\n", value);
-+	} else if (value & WLAN_AUTH_SHARED_KEY) {
-+		DBG_871X("wpa_set_auth_algs, WLAN_AUTH_SHARED_KEY  [value:0x%x]\n", value);
- 		padapter->securitypriv.ndisencryptstatus = Ndis802_11Encryption1Enabled;
- 
- 		padapter->securitypriv.ndisauthtype = Ndis802_11AuthModeShared;
- 		padapter->securitypriv.dot11AuthAlgrthm = dot11AuthAlgrthm_Shared;
--	} else if (value & AUTH_ALG_OPEN_SYSTEM) {
--		DBG_871X("wpa_set_auth_algs, AUTH_ALG_OPEN_SYSTEM\n");
-+	} else if (value & WLAN_AUTH_OPEN) {
-+		DBG_871X("wpa_set_auth_algs, WLAN_AUTH_OPEN\n");
- 		/* padapter->securitypriv.ndisencryptstatus = Ndis802_11EncryptionDisabled; */
- 		if (padapter->securitypriv.ndisauthtype < Ndis802_11AuthModeWPAPSK) {
- 			padapter->securitypriv.ndisauthtype = Ndis802_11AuthModeOpen;
- 			padapter->securitypriv.dot11AuthAlgrthm = dot11AuthAlgrthm_Open;
- 		}
--	} else if (value & AUTH_ALG_LEAP) {
--		DBG_871X("wpa_set_auth_algs, AUTH_ALG_LEAP\n");
-+	} else if (value & WLAN_AUTH_LEAP) {
-+		DBG_871X("wpa_set_auth_algs, WLAN_AUTH_LEAP\n");
- 	} else {
- 		DBG_871X("wpa_set_auth_algs, error!\n");
- 		ret = -EINVAL;

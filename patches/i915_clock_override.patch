@@ -1,23 +1,29 @@
 diff -ru a/drivers/gpu/drm/i915/i915_params.c b/drivers/gpu/drm/i915/i915_params.c
---- a/drivers/gpu/drm/i915/i915_params.c	2018-01-29 06:20:33.000000000 +0900
-+++ b/drivers/gpu/drm/i915/i915_params.c	2018-05-03 15:22:06.680610985 +0900
-@@ -190,3 +190,12 @@
- 
+--- a/drivers/gpu/drm/i915/i915_params.c	2018-08-13 05:41:04.000000000 +0900
++++ b/drivers/gpu/drm/i915/i915_params.c	2019-02-05 21:48:00.974184056 +0900
+@@ -181,6 +181,18 @@
  i915_param_named(enable_gvt, bool, 0400,
  	"Enable support for Intel GVT-g graphics virtualization host support(default:false)");
-+
+ 
 +i915_param_named(min_clock_force, int, 0400,
-+	"Set GPU minimum clock force (-1=default)");
++	"Set GPU minimum clock force (default: -1 (auto))");
++
 +i915_param_named(max_clock_force, int, 0400,
-+	"Set GPU maximum clock force (-1=default)");
++	"Set GPU maximum clock force (default: -1 (auto))");
++
 +i915_param_named(eff_clock_force, int, 0400,
-+	"Set GPU efficient clock force (-1=default)");
++	"Set GPU efficient clock force (default: -1 (auto))");
++
 +i915_param_named(guard_clock_force, int, 0400,
-+	"Set GPU guard clock force (-1=default)");
++	"Set GPU guard clock force (default: -1 (auto))");
++
+ static __always_inline void _print_param(struct drm_printer *p,
+ 					 const char *name,
+ 					 const char *type,
 diff -ru a/drivers/gpu/drm/i915/i915_params.h b/drivers/gpu/drm/i915/i915_params.h
---- a/drivers/gpu/drm/i915/i915_params.h	2018-01-29 06:20:33.000000000 +0900
-+++ b/drivers/gpu/drm/i915/i915_params.h	2018-05-03 15:23:47.868594557 +0900
-@@ -67,7 +67,11 @@
+--- a/drivers/gpu/drm/i915/i915_params.h	2018-08-13 05:41:04.000000000 +0900
++++ b/drivers/gpu/drm/i915/i915_params.h	2019-02-05 21:45:04.622931477 +0900
+@@ -70,7 +70,11 @@
  	param(bool, nuclear_pageflip, false) \
  	param(bool, enable_dp_mst, true) \
  	param(bool, enable_dpcd_backlight, false) \
@@ -31,9 +37,9 @@ diff -ru a/drivers/gpu/drm/i915/i915_params.h b/drivers/gpu/drm/i915/i915_params
  #define MEMBER(T, member, ...) T member;
  struct i915_params {
 diff -ru a/drivers/gpu/drm/i915/intel_pm.c b/drivers/gpu/drm/i915/intel_pm.c
---- a/drivers/gpu/drm/i915/intel_pm.c	2018-01-29 06:20:33.000000000 +0900
-+++ b/drivers/gpu/drm/i915/intel_pm.c	2018-05-03 15:46:59.976260347 +0900
-@@ -6521,15 +6521,39 @@
+--- a/drivers/gpu/drm/i915/intel_pm.c	2018-08-13 05:41:04.000000000 +0900
++++ b/drivers/gpu/drm/i915/intel_pm.c	2019-02-05 21:45:04.634931491 +0900
+@@ -6734,15 +6734,39 @@
  	/* static values from HW: RP0 > RP1 > RPn (min_freq) */
  	if (IS_GEN9_LP(dev_priv)) {
  		u32 rp_state_cap = I915_READ(BXT_RP_STATE_CAP);
@@ -80,7 +86,7 @@ diff -ru a/drivers/gpu/drm/i915/intel_pm.c b/drivers/gpu/drm/i915/intel_pm.c
  	/* hw_max = RP0 until we check for overclocking */
  	rps->max_freq = rps->rp0_freq;
  
-@@ -7158,22 +7182,35 @@
+@@ -7389,22 +7413,35 @@
  	}
  	DRM_DEBUG_DRIVER("DDR speed: %d MHz\n", dev_priv->mem_freq);
  
@@ -119,7 +125,7 @@ diff -ru a/drivers/gpu/drm/i915/intel_pm.c b/drivers/gpu/drm/i915/intel_pm.c
  	rps->min_freq = valleyview_rps_min_freq(dev_priv);
  	DRM_DEBUG_DRIVER("min GPU freq: %d MHz (%u)\n",
  			 intel_gpu_freq(dev_priv, rps->min_freq),
-@@ -7203,23 +7240,35 @@
+@@ -7434,23 +7471,35 @@
  	}
  	DRM_DEBUG_DRIVER("DDR speed: %d MHz\n", dev_priv->mem_freq);
  
